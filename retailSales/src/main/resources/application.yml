@@ -1,0 +1,91 @@
+
+server:
+  port: 8081
+  servlet:
+    context-path: /voucher
+    application-display-name: ????
+
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher
+  messages:
+    encoding: utf-8
+    basename: i18n/message-resources
+
+  security:
+    user:
+      name: admin
+      password: 111111
+      roles:
+        - ADMIN
+        - USER
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 50MB
+
+  datasource:
+    name: dsMaster
+    url: jdbc:mysql://127.0.0.1:3306/voucher?serverTimezone=GMT%2B8&characterEncoding=utf8&useUnicode=true&useSSL=false
+    #url: jdbc:mysql://localhost:3306/hfstore?serverTimezone=GMT%2B8&characterEncoding=utf8&useUnicode=true&useSSL=false&useAffectedRows=true
+    username: root
+    password: 12345666
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    ## ??Hikar???
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      pool-name: hikari-boot
+      auto-commit: true
+      ## ???????????(??????????????????)
+      maximum-pool-size: 10
+      ## ????????????
+      minimum-idle: 1
+      ## ?????sql??
+      connection-test-query: select 1
+      ## ?????????
+      login-timeout: 5
+      ## ??????????(30?)
+      connection-timeout: 30000
+      ## ???????(5?)
+      validation-timeout: 5000
+      ## ?????????????(10??)
+      idle-timeout: 600000
+      ## ?????????(30??)
+      max-lifetime: 1800000
+
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml
+  ## ???(??)
+  type-aliases-package: org.retailsales.voucher.entity
+  configuration:
+    call-setters-on-nulls: true
+    auto-mapping-behavior: full
+
+pagehelper:
+  auto-dialect: true
+
+rock:
+  idgen:
+    table: t_seqgen
+    initial: 1000
+    cache: 50
+    key-field-name: f_seqname
+    value-field-name: f_seqvalue
+
+encoder:
+  crypt:
+    enable: false
+    use-captcha: false
+
+logging:
+  config: classpath:logback.xml
+
+springdoc:
+  api-docs:
+    enabled: true # 开启OpenApi接口
+    path: /user-service/v3/api-docs  # 自定义路径，默认为 "/v3/api-docs"
+  swagger-ui:
+    enabled: true # 开启swagger界面，依赖OpenApi，需要OpenApi同时开启
+    path: /user-service/swagger-ui/index.html # 自定义路径，默认为"/swagger-ui/index.html"
