@@ -74,18 +74,18 @@ rock:
     key-field-name: f_seqname
     value-field-name: f_seqvalue
 
-encoder:
-  crypt:
-    enable: false
-    use-captcha: false
+#encoder:
+#  crypt:
+#    enable: false
+#    use-captcha: false
 
 logging:
   config: classpath:logback.xml
 
-springdoc:
-  api-docs:
-    enabled: true # 开启OpenApi接口
-    path: /user-service/v3/api-docs  # 自定义路径，默认为 "/v3/api-docs"
-  swagger-ui:
-    enabled: true # 开启swagger界面，依赖OpenApi，需要OpenApi同时开启
-    path: /user-service/swagger-ui/index.html # 自定义路径，默认为"/swagger-ui/index.html"
+#springdoc:
+#  api-docs:
+#    enabled: true # 开启OpenApi接口
+#    path: /user-service/v3/api-docs  # 自定义路径，默认为 "/v3/api-docs"
+#  swagger-ui:
+#    enabled: true # 开启swagger界面，依赖OpenApi，需要OpenApi同时开启
+#    path: /user-service/swagger-ui/index.html # 自定义路径，默认为"/swagger-ui/index.html"

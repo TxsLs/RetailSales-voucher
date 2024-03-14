@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 
 //@SpringBootApplication
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
-@MapperScan(basePackages = "org.boot.hf.admin.dao")
+@MapperScan(basePackages = "org.retailsales.voucher.dao")
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 public class RetailSalesApplication {
 
