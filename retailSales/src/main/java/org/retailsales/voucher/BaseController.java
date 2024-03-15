@@ -76,7 +76,6 @@ public abstract class BaseController<T extends Entity, S extends Service<T>> {
     }
 
 
-
     @Operation(summary = "更新一个实体", description = "该接口继承自BaseController")
     @PostMapping("/update")
     public @ResponseBody Result<Boolean> update(@Validated({Update.class, Default.class})
@@ -103,12 +102,11 @@ public abstract class BaseController<T extends Entity, S extends Service<T>> {
     @Operation(summary = "删除一个实体", description = "该接口继承自BaseController")
     @GetMapping("/remove")
     public @ResponseBody Result<Boolean> remove(@Parameter(description = "主键id", required = true)
-                                                    @NotNull @RequestParam long id) {
+                                                @NotNull @RequestParam long id) {
         log.debug("call remove");
         boolean result = this.service().delete(id);
         return Result.of(result);
     }
-
 
 
     @Operation(summary = "删除多个实体", description = "该接口继承自BaseController")
@@ -121,8 +119,6 @@ public abstract class BaseController<T extends Entity, S extends Service<T>> {
         boolean result = this.service().deleteMore(Arrays.asList(ids));
         return Result.of(result);
     }
-
-
 
 
     @Operation(summary = "查询一个实体", description = "该接口继承自BaseController")
