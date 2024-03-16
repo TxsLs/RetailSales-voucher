@@ -11,10 +11,7 @@ import org.retailsales.voucher.Entity;
 @Table(name = "t_category", alias = "ca")
 public class Category extends Entity {
 
-    @Schema(description = "分类编号", required = true, example = "1")
-    private Long id;
-
-    @Schema(description = "分类名称", required = false, example = "2")
+    @Schema(description = "分类名称", required = true, example = "1")
     private String name;
 
 

@@ -58,7 +58,7 @@ public abstract class BaseController<T extends Entity, S extends Service<T>> {
         return this.service;
     }
 
-    @ModelAttribute
+   // @ModelAttribute
 //	public void checkLogin() throws LoginException {
 //		if (AppUtils.useCaptcha && !AppUtils.isLogin())
 //			throw new LoginException("未登录!");

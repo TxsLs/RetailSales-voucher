@@ -45,12 +45,12 @@ public class ProductController extends BaseController<Product, ProductService> {
             where.like("categoryId", categoryId);
         if (StringUtils.isNotEmpty(price))
             where.like("price", price);
-        if (StringUtils.isNotEmpty(status))
+       /* if (StringUtils.isNotEmpty(status))
             where.like("status", status);
         if (StringUtils.isNotEmpty(empStatus))
             where.like("empStatus", empStatus);
         if (merchantId != null)
-            where.equal(DataType.LONG, "merchantId", merchantId.toString());
+            where.equal(DataType.LONG, "merchantId", merchantId.toString());*/
         //	if (jobId != null)
         //		where.equal(DataType.LONG, "jobId", jobId.toString());
         //	if (workstateId != null)

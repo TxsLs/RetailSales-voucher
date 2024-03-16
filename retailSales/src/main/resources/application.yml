@@ -13,13 +13,13 @@ spring:
     encoding: utf-8
     basename: i18n/message-resources
 
-  security:
-    user:
-      name: admin
-      password: 111111
-      roles:
-        - ADMIN
-        - USER
+  #  security:
+  #    user:
+  #      name: admin
+  #      password: 111111
+  #      roles:
+  #        - ADMIN
+  #        - USER
 
   servlet:
     multipart:

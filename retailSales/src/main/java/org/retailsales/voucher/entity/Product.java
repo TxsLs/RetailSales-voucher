@@ -36,9 +36,9 @@ public class Product extends Entity {
     @Schema(description = "商品分类编号", required = true, example = "5")
     private Long categoryId;
 
-    @IgnoreInsertUpdate
+   /* @IgnoreInsertUpdate
     @Schema(description = "商品状态", required = false, example = "6")
-    private Integer status;
+    private Integer status;*/
 
 
 }

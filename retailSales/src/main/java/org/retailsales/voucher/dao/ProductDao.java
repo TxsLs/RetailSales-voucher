@@ -9,6 +9,6 @@ import java.util.Map;
 
 @Mapper
 public interface ProductDao extends Dao<Product> {
-    Page<Product> findPageByCondition(Map<String, Object> condition);
+
 
 }
