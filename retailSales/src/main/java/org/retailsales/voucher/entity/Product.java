@@ -27,11 +27,11 @@ public class Product extends Entity {
     @Column(value = "f_name", tableAlias = "cg", ignoreInsert = true, ignoreUpdate = true)
     private String categoryName;
 
-    @Schema(description = "商品价格", required = true, example = "3")
-    private BigDecimal price;
+   /* @Schema(description = "商品价格", required = true, example = "3")
+    private BigDecimal price;*/
 
     @Schema(description = "商品库存", required = true, example = "4")
-    private Integer stockQuantity;
+    private Long stockQuantity;
 
     @Schema(description = "商品分类编号", required = true, example = "5")
     private Long categoryId;

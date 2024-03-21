@@ -83,28 +83,28 @@ public abstract class AppUtils {
 //		return user instanceof User ? (User) user : null;
 //	}
 
-	/**
-	 * <b>将Mybatis的Page转换成PageSet。</b>
-	 * <p><b>详细说明：</b></p>
-	 * <!-- 在此添加详细说明 -->
-	 * 无。
-	 * @param <E>
-	 * @param page Page
-	 * @return PageSet
-	 */
-	public static <E> PageSet<E> toPageSet(Page<E> page) {
-		return PageSet.of(page.getResult(), page.getPageNum(), page.getPageSize(), page.getTotal());
-	}
+    /**
+     * <b>将Mybatis的Page转换成PageSet。</b>
+     * <p><b>详细说明：</b></p>
+     * <!-- 在此添加详细说明 -->
+     * 无。
+     * @param <E>
+     * @param page Page
+     * @return PageSet
+     */
+    public static <E> PageSet<E> toPageSet(Page<E> page) {
+        return PageSet.of(page.getResult(), page.getPageNum(), page.getPageSize(), page.getTotal());
+    }
 
-	public static void writeJson(ServletResponse response, Result<?> result) throws IOException {
-		HttpServletResponse resp = ((HttpServletResponse) response);
-		resp.setContentType(MediaType.APPLICATION_JSON_VALUE);
-		resp.setCharacterEncoding(StringUtil.UTF_8.name());
-		PrintWriter out = resp.getWriter();
-		try {
-			out.write(JsonUtil.toJson(result));
-		} finally {
-			IOUtil.flushAndClose(out);
-		}
-	}
+/*	public static void writeJson(ServletResponse response, Result<?> result) throws IOException {
+        HttpServletResponse resp = ((HttpServletResponse) response);
+        resp.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        resp.setCharacterEncoding(StringUtil.UTF_8.name());
+        PrintWriter out = resp.getWriter();
+        try {
+            out.write(JsonUtil.toJson(result));
+        } finally {
+            IOUtil.flushAndClose(out);
+        }
+    }*/
 }
