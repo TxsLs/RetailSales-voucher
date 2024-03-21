@@ -10,7 +10,6 @@ import org.quincy.rock.core.dao.annotation.Table;
 import org.retailsales.voucher.Entity;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 @Getter
 @Setter

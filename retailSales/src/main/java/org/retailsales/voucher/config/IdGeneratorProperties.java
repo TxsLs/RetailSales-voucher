@@ -24,6 +24,6 @@ public class IdGeneratorProperties {
 	private String table; //维护自增主键的表名
 	private long initial; //初始值
 	private int cache; //缓冲主键个数
-	private String KeyFieldName; //主键key字段名
+	private String keyFieldName; //主键key字段名
 	private String valueFieldName; //主键值字段名
 }

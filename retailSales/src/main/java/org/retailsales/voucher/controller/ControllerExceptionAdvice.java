@@ -4,6 +4,7 @@ import jakarta.validation.ValidationException;
 
 import org.mybatis.spring.MyBatisSystemException;
 import org.quincy.rock.core.vo.Result;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -141,5 +142,16 @@ public class ControllerExceptionAdvice {
         return Result.toResult(result);
     }
 
+    @ExceptionHandler(DuplicateKeyException.class)
+    public Result<?> handleDuplicateKeyException(DuplicateKeyException ex) {
+        // 提示生成的主键重复，请再试一次
+        System.out.println("捕获到重复键异常，提示生成的主键重复，请再试一次");
+
+        // 返回相应的处理结果
+        Map<String, Object> result = new HashMap<>();
+        result.put("success", false);
+        result.put("errorMessage", "生成的主键重复，请再试一次");
+        return Result.toResult(result);
+    }
 
 }

@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.constraints.NotBlank;
@@ -54,7 +53,7 @@ public abstract class BaseController<T extends Entity, S extends Service<T>> {
         return this.service;
     }
 
-   // @ModelAttribute
+    // @ModelAttribute
 //	public void checkLogin() throws LoginException {
 //		if (AppUtils.useCaptcha && !AppUtils.isLogin())
 //			throw new LoginException("未登录!");
@@ -68,6 +67,25 @@ public abstract class BaseController<T extends Entity, S extends Service<T>> {
                                              @RequestParam(defaultValue = "false") boolean ignoreNullValue) {
         log.debug("call add");
         boolean result = this.service().insert(vo, ignoreNullValue);
+        return Result.of(result);
+    }
+
+    @Operation(summary = "添加多个实体", description = "该接口继承自BaseController")
+    @PostMapping("/addMultiple")
+    public @ResponseBody Result<Boolean> addMultiple(@Validated({Default.class})
+                                                     @RequestBody List<T> voList,
+                                                     @Parameter(description = "是否忽略空值", example = "false")
+                                                     @RequestParam(defaultValue = "false") boolean ignoreNullValue) {
+        log.debug("call addMultiple");
+
+        boolean result = true;
+        for (T vo : voList) {
+            boolean subResult = this.service().insert(vo, ignoreNullValue);
+            if (!subResult) {
+                result = false;
+                break; // 如果其中一个插入失败，则跳出循环
+            }
+        }
         return Result.of(result);
     }
 
