@@ -26,7 +26,7 @@ public class PurchaseOrder extends Entity {
     private Long productId;
 
     @Schema(description = "进货时间", required = true, example = "2")
-    private String PurchaseDate;
+    private String purchaseDate;
 
     @Schema(description = "进货数量", required = true, example = "3")
     private Long quantity;
@@ -52,4 +52,7 @@ public class PurchaseOrder extends Entity {
     @Schema(description = "供应商名称", required = false, example = "8")
     @Column(value = "f_phone", tableAlias = "s", ignoreInsert = true, ignoreUpdate = true)
     private Long supplierPhone;
+
+    @Schema(description = "操作人", required = true, example = "3")
+    private String emp;
 }
