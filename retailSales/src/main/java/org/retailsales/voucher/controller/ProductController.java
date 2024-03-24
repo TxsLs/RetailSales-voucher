@@ -3,6 +3,7 @@ package org.retailsales.voucher.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.quincy.rock.core.dao.DaoUtil;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @Slf4j
-@Schema(description = "商品管理模块")
+@Tag(name = "商品管理模块")
 @RequestMapping("/product")
 public class ProductController extends BaseController<Product, ProductService> {
 

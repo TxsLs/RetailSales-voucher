@@ -2,6 +2,7 @@ package org.retailsales.voucher.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.quincy.rock.core.vo.Result;
 import org.retailsales.voucher.BaseController;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Slf4j
-@Schema(description = "供应商管理")
+@Tag(name = "供应商管理")
 @Controller
 @RequestMapping("/supplier")
 public class SupplierController extends BaseController<Supplier, SupplierService> {

@@ -12,9 +12,9 @@ import org.quincy.rock.core.dao.sql.Sort;
 import org.quincy.rock.core.vo.PageSet;
 import org.quincy.rock.core.vo.Result;
 import org.retailsales.voucher.BaseController;
-import org.retailsales.voucher.entity.Product;
 import org.retailsales.voucher.entity.PurchaseOrder;
-import org.retailsales.voucher.service.PurchaseOrderService;
+import org.retailsales.voucher.entity.SalesOrder;
+import org.retailsales.voucher.service.SaleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,17 +22,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Slf4j
-@Tag(name = "进货单管理")
+@Tag(name = "销售单管理")
 @Controller
-@RequestMapping("/purchase")
-public class PurchaseOrderController extends BaseController<PurchaseOrder, PurchaseOrderService> {
+@RequestMapping("/sale")
+public class SaleController extends BaseController<SalesOrder, SaleService> {
+
 
     @Operation(summary = "条件分页查询", description = "")
     @GetMapping("/queryPage")
-    public @ResponseBody Result<PageSet<PurchaseOrder>> queryPage(
+    public @ResponseBody Result<PageSet<SalesOrder>> queryPage(
             @Parameter(description = "名称(支持like)，允许null") @RequestParam(required = false) String productName,
             @Parameter(description = "排序规则字符串") @RequestParam(required = false) String sort,
-            @Parameter(description = "排序规则字符串") @RequestParam(required = false) String price,
+            @Parameter(description = "排序规则字符串") @RequestParam(required = false) String salePrice,
             @Parameter(description = "categoryName") @RequestParam(required = false) String categoryName,
             @Parameter(description = "排序规则字符串") @RequestParam(required = false) String stockQuantity,
             @Parameter(description = "页码", required = true) @RequestParam long pageNum,
@@ -41,8 +42,8 @@ public class PurchaseOrderController extends BaseController<PurchaseOrder, Purch
         Predicate where = DaoUtil.and();
         if (StringUtils.isNotEmpty(productName))
             where.like("productName", productName);
-        if (StringUtils.isNotEmpty(price))
-            where.like("price", price);
+        if (StringUtils.isNotEmpty(salePrice))
+            where.like("salePrice", salePrice);
         if (StringUtils.isNotEmpty(stockQuantity))
             where.like("stockQuantity", stockQuantity);
         if (StringUtils.isNotEmpty(categoryName))
@@ -56,7 +57,7 @@ public class PurchaseOrderController extends BaseController<PurchaseOrder, Purch
             where.equal(DataType.LONG, "merchantId", merchantId.toString());*/
         //	if (workstateId != null)
         //		where.equal(DataType.LONG, "workstateId", workstateId.toString());
-        PageSet<PurchaseOrder> ps = this.service().findPage(where, Sort.parse(sort), pageNum, pageSize);
+        PageSet<SalesOrder> ps = this.service().findPage(where, Sort.parse(sort), pageNum, pageSize);
         return Result.toResult(ps);
     }
 

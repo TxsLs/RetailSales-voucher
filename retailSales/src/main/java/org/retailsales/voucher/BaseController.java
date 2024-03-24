@@ -94,7 +94,7 @@ public abstract class BaseController<T extends Entity, S extends Service<T>> {
     @PostMapping("/update")
     public @ResponseBody Result<Boolean> update(@Validated({Update.class, Default.class})
                                                 @RequestBody T vo,
-                                                @Parameter(description = "是否忽略空值", example = "false")
+                                                @Parameter(description = "是否忽略空值", example = "true")
                                                 @RequestParam(defaultValue = "true") boolean ignoreNullValue) {
         log.debug("call update");
         boolean result = this.service().update(vo, ignoreNullValue, null, "password");

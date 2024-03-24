@@ -7,5 +7,5 @@ import org.retailsales.voucher.service.SupplierService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class supplierServiceImpl extends BaseService<Supplier, SupplierDao> implements SupplierService {
+public class SupplierServiceImpl extends BaseService<Supplier, SupplierDao> implements SupplierService {
 }

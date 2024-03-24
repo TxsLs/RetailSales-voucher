@@ -13,13 +13,15 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@Table(name = "t_inbound_order", alias = "io")
-@JoinTables({@JoinTable(name = "t_product", alias = "p", onExpr = "io.f_product_id=p.f_id"),
+@Schema(description = "销售单实体(在执行更新操作时采取动态更新策略，如果属性值为空，则忽略该属性)")
+@Table(name = "t_sales_order", alias = "so")
+@JoinTables({@JoinTable(name = "t_product", alias = "p", onExpr = "so.f_product_id=p.f_id"),
         @JoinTable(name = "t_category", alias = "cg", onExpr = "cg.f_id=p.f_category_id"),
         @JoinTable(name = "t_purchase_order", alias = "po", onExpr = "p.f_id=po.f_product_id"),
-        @JoinTable(name = "t_supplier", alias = "s", onExpr = "po.f_supplier_id=s.f_id")
+        @JoinTable(name = "t_supplier", alias = "s", onExpr = "po.f_supplier_id=s.f_id"),
 })
-public class InboundOrder extends Entity {
+public class SalesOrder extends Entity {
+
 
     @Schema(description = "商品id", required = true, example = "1")
     private Long productId;
@@ -32,8 +34,8 @@ public class InboundOrder extends Entity {
     @Column(value = "f_name", tableAlias = "cg", ignoreInsert = true, ignoreUpdate = true)
     private String categoryName;
 
-    @Schema(description = "入库时间", required = true, example = "2")
-    private String inboundDate;
+    @Schema(description = "销售时间", required = true, example = "2")
+    private String saleDate;
 
     @Schema(description = "进货时间", required = false, example = "2")
     @Column(value = "f_purchase_date", tableAlias = "po", ignoreInsert = true, ignoreUpdate = true)
@@ -43,15 +45,13 @@ public class InboundOrder extends Entity {
     @Column(value = "f_stock_quantity", tableAlias = "p", ignoreInsert = true, ignoreUpdate = true)
     private Long stockQuantity;
 
-    @Schema(description = "入库数量", required = true, example = "3")
+    @Schema(description = "销售数量", required = true, example = "3")
     private Long quantity;
 
-    @Schema(description = "进货单价", required = false, example = "3")
-    @Column(value = "f_price", tableAlias = "po", ignoreInsert = true, ignoreUpdate = true)
-    private BigDecimal price;
+    @Schema(description = "销售单价", required = false, example = "3")
+    private BigDecimal salePrice;
 
-    @Schema(description = "进货总价", required = false, example = "4")
-    @Column(value = "f_total_price", tableAlias = "po", ignoreInsert = true, ignoreUpdate = true)
+    @Schema(description = "销售总价", required = false, example = "4")
     private BigDecimal totalPrice;
 
     @Schema(description = "供应商id", required = true, example = "4")
@@ -64,4 +64,8 @@ public class InboundOrder extends Entity {
 
     @Schema(description = "操作人", required = true, example = "3")
     private String emp;
+
+    @Schema(description = "顾客代号", required = true, example = "3")
+    private String cus;
+
 }

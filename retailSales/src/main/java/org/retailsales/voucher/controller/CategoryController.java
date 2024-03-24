@@ -3,6 +3,7 @@ package org.retailsales.voucher.controller;
 import io.swagger.v3.oas.annotations.Operation;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.quincy.rock.core.vo.Result;
 import org.retailsales.voucher.BaseController;
@@ -14,10 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.io.IOException;
 
 @Slf4j
-@Schema(description = "分类管理模块")
+@Tag(name = "分类管理模块")
 @Controller
 @RequestMapping("/category")
 public class CategoryController extends BaseController<Category, CategoryService> {
@@ -26,7 +26,7 @@ public class CategoryController extends BaseController<Category, CategoryService
     //@Parameter(name = "vo", description = "分类", required = true)
     @PostMapping("/addCategory")
     public @ResponseBody Result<Boolean> addCategory(@RequestBody Category vo) {
-        log.debug("call addcategory!");
+        log.debug("call addCategory!");
         boolean exist = this.service().existByName("name", vo.getName(), null);
         boolean result;
         if (!exist) {//注册账户时先判断输入的名是否存在
