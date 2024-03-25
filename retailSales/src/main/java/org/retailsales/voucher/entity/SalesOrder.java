@@ -45,6 +45,10 @@ public class SalesOrder extends Entity {
     @Column(value = "f_stock_quantity", tableAlias = "p", ignoreInsert = true, ignoreUpdate = true)
     private Long stockQuantity;
 
+    @Schema(description = "上架数量", required = true, example = "4")
+    @Column(value = "f_onsale_quantity", tableAlias = "p", ignoreInsert = true, ignoreUpdate = true)
+    private Long onsaleQuantity;
+
     @Schema(description = "销售数量", required = true, example = "3")
     private Long quantity;
 

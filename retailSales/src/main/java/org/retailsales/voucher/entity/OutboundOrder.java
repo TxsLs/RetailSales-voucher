@@ -40,6 +40,10 @@ public class OutboundOrder extends Entity {
     @Schema(description = "出库数量", required = true, example = "3")
     private Long quantity;
 
+    @Schema(description = "上架数量", required = true, example = "4")
+    @Column(value = "f_stock_quantity", tableAlias = "p", ignoreInsert = true, ignoreUpdate = true)
+    private Long onsaleQuantity;
+
 
     @Schema(description = "操作人", required = true, example = "3")
     private String emp;

@@ -5,12 +5,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import org.quincy.rock.core.dao.annotation.Column;
-import org.quincy.rock.core.dao.annotation.IgnoreInsertUpdate;
 import org.quincy.rock.core.dao.annotation.JoinTable;
 import org.quincy.rock.core.dao.annotation.Table;
 import org.retailsales.voucher.Entity;
-
-import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -32,6 +29,9 @@ public class Product extends Entity {
 
     @Schema(description = "商品库存", required = true, example = "4")
     private Long stockQuantity;
+
+    @Schema(description = "上架数量", required = true, example = "4")
+    private Long onsaleQuantity;
 
     @Schema(description = "商品分类编号", required = true, example = "5")
     private Long categoryId;
