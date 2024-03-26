@@ -1,5 +1,3 @@
-import { MockMethod } from 'vite-plugin-mock'
-
 export default [
   {
     url: `/mock/work/list`,
@@ -299,31 +297,33 @@ export default [
                 options: [
                   '类型：页面'
                 ]
-              },{
+              }, {
                 id: 36,
                 tags: ['新增'],
                 name: '多级嵌套表单',
                 options: [
                   '类型：页面'
                 ]
-              },{
-                id: 37,
-                tags: ['新增'],
-                name: '页面-业务表格',
-                options: [
-                  '类型：页面'
-                ]
-              },{
-                id: 38,
-                tags: ['新增'],
-                name: '页面-卡片列表',
-                options: [
-                  '类型：页面'
-                ]
-              },{
-                id: 39,
-                tags: ['新增'],
-                name: '页面-百度一下',
+              },
+                {
+                  id: 37,
+                  tags: ['新增'],
+                  name: '页面-业务表格',
+                  options: [
+                    '类型：页面'
+                  ]
+                },
+                {
+                  id: 38,
+                  tags: ['新增'],
+                  name: '页面-卡片列表',
+                  options: [
+                    '类型：页面'
+                  ]
+                }, {
+                  id: 39,
+                  tags: ['新增'],
+                  name: '页面-百度一下',
                 options: [
                   '类型：页面'
                 ]

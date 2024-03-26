@@ -1,12 +1,12 @@
 import request from '@/utils/system/request'
 
 // 获取数据api
-export function getData(data: object) {
+export function getData(params: object) {
   return request({
-    url: '/table/list',
-    method: 'post',
-    baseURL: '/mock',
-    data
+    url: '/product/queryPage',
+    method: 'get',
+    baseURL: 'http://127.0.0.1:8081/voucher',
+    params
   })
 }
 
