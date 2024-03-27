@@ -136,7 +136,7 @@ export default defineComponent({
             //   page.total = Number(res.data.pager.total)
             // })
             .catch(error => {
-                console.log(tableData.value + "*********------------*****")
+                //console.log(tableData.value + "*********------------*****")
                 console.error(error)
                 let data = error.result.content
                 console.log(data + "123123")
