@@ -2,14 +2,12 @@ package org.retailsales.voucher.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.quincy.rock.core.dao.DaoUtil;
 import org.quincy.rock.core.dao.sql.Predicate;
 import org.quincy.rock.core.dao.sql.Sort;
-import org.quincy.rock.core.lang.DataType;
 import org.quincy.rock.core.vo.PageSet;
 import org.quincy.rock.core.vo.Result;
 import org.retailsales.voucher.BaseController;
@@ -49,6 +47,23 @@ public class ProductController extends BaseController<Product, ProductService> {
         //		where.equal(DataType.LONG, "workstateId", workstateId.toString());
         PageSet<Product> ps = this.service().findPage(where, Sort.parse(sort), pageNum, pageSize);
         return Result.toResult(ps);
+    }
+
+    @Operation(summary = "加product", description = "")
+    //@Parameter(name = "vo", description = "分类", required = true)
+    @PostMapping("/addProduct")
+    public @ResponseBody Result<Boolean> addCategory(@RequestBody Product vo) {
+        log.debug("call addProduct!");
+        boolean exist = this.service().existByName("name", vo.getName(), null);
+        boolean result;
+        if (!exist) {//注册账户时先判断输入的名是否存在
+            result = this.service().insert(vo, true);
+
+            return Result.of(result);
+        } else {
+            return Result.toResult("1075", "此商品已存在！请换一个吧！*^____^*");
+        }
+
     }
 
 }
