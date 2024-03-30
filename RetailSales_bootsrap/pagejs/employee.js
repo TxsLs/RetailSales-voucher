@@ -23,31 +23,31 @@ $(document).ready(function () {
   })
 
 
-  var ssoUser = null;  //当前用户
-  _root.loginUser({}, function (rtn) {
-    if (rtn.hasError) {
-      alert(rock.errorText(rtn, "获得当前用户失败！"));
-    } else {
-      ssoUser = rtn.result;
-    }
-    if (rock.isNull(ssoUser) || ssoUser.admin == 1) {
-      $("#loginUser").html("未知用户请登录！");
-      document.getElementById("login-dropdown").style.display = "block";
-      document.getElementById("profile-dropdown").style.display = "none";
-    } else {
-      $("#loginUser").html(ssoUser.name);
-      document.getElementById("login-dropdown").style.display = "none";
-      document.getElementById("profile-dropdown").style.display = "block";
-      //登录后修改头像
-      var mvc = rock.initSvr(["employee"]);
-      var Service = mvc.findService("employee");
-      if (ssoUser.hasPhoto) {
-        $("#avatarImage").attr("src", Service.url("photo") + "?id=" + ssoUser.id);
-      }
-    }
+  // var ssoUser = null;  //当前用户
+  // _root.loginUser({}, function (rtn) {
+  //   if (rtn.hasError) {
+  //     alert(rock.errorText(rtn, "获得当前用户失败！"));
+  //   } else {
+  //     ssoUser = rtn.result;
+  //   }
+  //   if (rock.isNull(ssoUser) || ssoUser.admin == 1) {
+  //     $("#loginUser").html("未知用户请登录！");
+  //     document.getElementById("login-dropdown").style.display = "block";
+  //     document.getElementById("profile-dropdown").style.display = "none";
+  //   } else {
+  //     $("#loginUser").html(ssoUser.name);
+  //     document.getElementById("login-dropdown").style.display = "none";
+  //     document.getElementById("profile-dropdown").style.display = "block";
+  //     //登录后修改头像
+  //     var mvc = rock.initSvr(["employee"]);
+  //     var Service = mvc.findService("employee");
+  //     if (ssoUser.hasPhoto) {
+  //       $("#avatarImage").attr("src", Service.url("photo") + "?id=" + ssoUser.id);
+  //     }
+  //   }
 
 
-  });
+  // });
 
 
   //退出登录

@@ -94,30 +94,30 @@
         </div>
 
         <!-- <div class="col-12">
-          <div class="row">
-            <label for="status" class="col-sm-auto col-form-label">商品上架状态</label>
-            <div class="col">
-              <select class="selectpicker" id="status" name="status">
-                <option value="">全部</option>
-                <option value="1">上架</option>
-                <option value="0">下架</option>
-              </select>
-            </div>
+        <div class="row">
+          <label for="status" class="col-sm-auto col-form-label">商品上架状态</label>
+          <div class="col">
+            <select class="selectpicker" id="status" name="status">
+              <option value="">全部</option>
+              <option value="1">上架</option>
+              <option value="0">下架</option>
+            </select>
           </div>
-        </div> -->
+        </div>
+      </div> -->
 
         <!-- <div class="col-12">
-          <div class="row">
-            <label for="empStatus" class="col-sm-auto col-form-label">商品封禁状态</label>
-            <div class="col">
-              <select class="selectpicker" id="empStatus" name="empStatus">
-                <option value="">全部</option>
-                <option value="1">正常</option>
-                <option value="0">被封禁</option>
-              </select>
-            </div>
+        <div class="row">
+          <label for="empStatus" class="col-sm-auto col-form-label">商品封禁状态</label>
+          <div class="col">
+            <select class="selectpicker" id="empStatus" name="empStatus">
+              <option value="">全部</option>
+              <option value="1">正常</option>
+              <option value="0">被封禁</option>
+            </select>
           </div>
-        </div> -->
+        </div>
+      </div> -->
 
         <div class="col-12 gap-2">
 
@@ -926,11 +926,12 @@
       // data-bs-title="修改商品信息"><i class="bi bi-pencil"></i></button>`;
 
       //第二个按钮
-      html += `<button type="button" class="btn btn-light mx-1 btn-sm ban-btn" data-bs-toggle="tooltip" data-bs-placement="top"
-        data-bs-title="封禁此商品"><i class="bi bi-lock-fill"></i></button>`;
+      html += `<button type="button" class="btn btn-light mx-1 btn-sm edit-btn" data-bs-toggle="tooltip" data-bs-placement="top"
+        data-bs-title="修改进货单信息"><i class="bi bi-pencil"></i></button>`;
 
-      html += `<button type="button" class="btn btn-light btn-sm show-btn" data-bs-toggle="tooltip" data-bs-placement="top"
-        data-bs-title="查看商品评价"><i class="bi bi-layout-text-sidebar-reverse"></i></button>`;
+      html += `<button type="button" class="btn btn-light btn-sm del-btn" data-bs-toggle="tooltip" data-bs-placement="top"
+       data-bs-title="删除进货单"><i class="bi bi-trash-fill"></i></button>`
+
       //第三个按钮
       //   html += `<button type="button" class="btn btn-light btn-sm del-btn" data-bs-toggle="tooltip" data-bs-placement="top"
       // data-bs-title="删除商品"><i class="bi bi-trash-fill"></i></button>`
@@ -940,11 +941,11 @@
       // data-bs-title="修改商品信息"><i class="bi bi-pencil"></i></button>`;
 
       //第二个按钮
-      html += `<button  type="button" class="btn btn-light mx-1 btn-sm unlock-btn" data-bs-toggle="tooltip" data-bs-placement="top"
-data-bs-title="解封此商品"><i class="bi bi-unlock-fill"></i></button>`
+      //       html += `<button  type="button" class="btn btn-light mx-1 btn-sm unlock-btn" data-bs-toggle="tooltip" data-bs-placement="top"
+      // data-bs-title="解封此商品"><i class="bi bi-unlock-fill"></i></button>`
 
-      html += `<button type="button" class="btn btn-light btn-sm show-btn" data-bs-toggle="tooltip" data-bs-placement="top"
-        data-bs-title="查看商品评价"><i class="bi bi-layout-text-sidebar-reverse"></i></button>`;
+      //       html += `<button type="button" class="btn btn-light btn-sm show-btn" data-bs-toggle="tooltip" data-bs-placement="top"
+      //         data-bs-title="查看商品评价"><i class="bi bi-layout-text-sidebar-reverse"></i></button>`;
       //第三个按钮
       //           html += `<button  type="button" class="btn btn-light btn-sm del-btn" data-bs-toggle="tooltip" data-bs-placement="top"
       // data-bs-title="删除商品"><i class="bi bi-trash-fill"></i></button>`

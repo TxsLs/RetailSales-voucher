@@ -1,15 +1,11 @@
 package org.retailsales.voucher;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.extern.slf4j.Slf4j;
 import org.quincy.rock.core.dao.DaoUtil;
 import org.quincy.rock.core.dao.sql.Predicate;
 import org.quincy.rock.core.dao.sql.Sort;
@@ -21,8 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-
-import lombok.extern.slf4j.Slf4j;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <b>基类Controller。</b>
@@ -77,7 +74,6 @@ public abstract class BaseController<T extends Entity, S extends Service<T>> {
                                                      @Parameter(description = "是否忽略空值", example = "false")
                                                      @RequestParam(defaultValue = "false") boolean ignoreNullValue) {
         log.debug("call addMultiple");
-
         boolean result = true;
         for (T vo : voList) {
             boolean subResult = this.service().insert(vo, ignoreNullValue);

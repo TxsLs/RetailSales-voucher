@@ -50,7 +50,6 @@ public class ProductController extends BaseController<Product, ProductService> {
     }
 
     @Operation(summary = "加product", description = "")
-    //@Parameter(name = "vo", description = "分类", required = true)
     @PostMapping("/addProduct")
     public @ResponseBody Result<Boolean> addCategory(@RequestBody Product vo) {
         log.debug("call addProduct!");

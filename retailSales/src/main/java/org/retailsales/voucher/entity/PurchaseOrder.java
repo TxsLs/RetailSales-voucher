@@ -49,8 +49,7 @@ public class PurchaseOrder extends Entity {
     @Column(value = "f_id", tableAlias = "cg", ignoreInsert = true, ignoreUpdate = true)
     private String categoryId;
 
-    @Schema(description = "供应商名称", required = false, example = "7")
-    @Column(value = "f_id", tableAlias = "s", ignoreInsert = true, ignoreUpdate = true)
+    @Schema(description = "供应商id", required = true, example = "7")
     private String supplierId;
 
     @Schema(description = "供应商名称", required = false, example = "7")
