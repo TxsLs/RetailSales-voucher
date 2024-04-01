@@ -123,7 +123,7 @@ public abstract class BaseController<T extends Entity, S extends Service<T>> {
     @GetMapping(value = "/removeMore")
     public @ResponseBody Result<Boolean> removeMore(
             @Parameter(description = "多个主键id", required = true, allowEmptyValue = false)
-            @RequestParam("id") @NotEmpty Long[] ids
+            @RequestParam("id[]") @NotEmpty Long[] ids
     ) {
         log.debug("call removeMore");
         boolean result = this.service().deleteMore(Arrays.asList(ids));

@@ -20,14 +20,15 @@
 <div class="d-flex align-items-center justify-content-center">
   <div style="width: 400px; max-width: 100%; margin-top: 12vh;" class="p-2">
     <h2 class="text-center">新增库存商品信息</h2>
-    <p class="text-secondary text-center">填写个人信息</p>
+    <p class="text-secondary text-center">填写商品信息</p>
 
     <form id="form" class="form">
       <div class="mb-3">
         <div class="input-group">
           <span class="input-group-text bg-white"><i class="bi bi-person-vcard"></i></span>
-          <input type="text" class="form-control" id="code" name="code" maxlength="20" tabindex="2" autocomplete="on"
-                 placeholder="请输入账号" required data-bv-container="#err_username" pattern="^[A-Za-z0-9]{0,20}$">
+          <input type="text" class="form-control" id="name" name="name" maxlength="20" tabindex="2" autocomplete="on"
+                 placeholder="请输入商品名称" required data-bv-container="#err_username"
+                 pattern="^[\u4e00-\u9fa5A-Za-z0-9\uFF01-\uFFEF]{0,20}$">
         </div>
 
       </div>
@@ -46,6 +47,25 @@
         </div>
       </div>
 
+      <div class="row mb-3">
+        <label for="unit" class="col-sm-3 col-form-label text-sm-end">计件方式</label>
+        <div class="col-sm-9">
+          <div class="input-group">
+            <span class="input-group-text bg-white"><i class="bi bi-tags-fill"></i></span>
+            <select class="form-select" id="unit" name="unit" tabindex="6">
+              <option value="">请选择</option>
+              <option value="瓶">瓶</option>
+              <option value="袋">袋</option>
+              <option value="千克">千克</option>
+              <option value="盒">盒</option>
+              <option value="箱">箱</option>
+              <option value="件">件</option>
+              <option value="支">支</option>
+              <option value="套">套</option>
+            </select>
+          </div>
+        </div>
+      </div>
 
       <div class="row mb-3">
         <label for="categoryName" class="col-sm-3 col-form-label text-sm-end">没有找到想要的分类？</label>
@@ -210,6 +230,241 @@
 
 <script>
 
+  var mvc = rock.initSvr(["category"]);
+  var categoryService = mvc.findService("category");
+  rock.initBasicMethod([categoryService]);
+
+  function loadCategory() {
+    var $search = $("#categoryId");
+    var defaultOption = $search.find('option:first'); // 保存 "请选择分类" 选项
+
+    $search.empty(); // 清空除了 "请选择分类" 选项之外的其他选项
+    $search.append(defaultOption); // 重新添加 "请选择分类" 选项
+
+    categoryService.queryAll({sort: "id"}, function (rtn, status) {
+      if (rtn.hasError) {
+        alert(rock.errorText(rtn, "查询列表失败!"));
+      } else if (rtn.notEmpty) {
+        var list = rtn.result, option = '<option value="%s">[%s] － %s</option>';
+        var $search = $("#categoryId");
+        $.each(list, function (i, vo) {
+          $search.append(rock.format(option, [vo.id, vo.id, vo.name]));
+          // $edit.append(rock.format(option, [vo.id, vo.code, vo.name]));
+        });
+      } else {
+        alert("未查询到部门列表!");
+      }
+    });
+  }
+
+  // 获取按钮和输入框元素
+  let addButton = document.getElementById('addCategoryButton');
+  let categoryNameInput = document.getElementById('categoryName');
+  let errorElement = null; // 错误提示元素
+
+  // 添加点击事件监听器
+  addButton.addEventListener('click', function (event) {
+    event.preventDefault(); // 阻止表单的默认提交行为
+
+    // 获取输入框的值
+    let categoryName = categoryNameInput.value;
+
+    // 校验输入框不为空
+    if (categoryName.trim() === '') {
+      // 输入框为空，显示错误提示
+      showErrorMessage('输入框不能为空');
+      return; // 停止执行后续逻辑
+    }
+
+    // 创建一个对象，包含要发送到后端的数据
+    let data = {
+      name: categoryName
+    };
+
+    // 使用 AJAX 发送数据到后端
+    $.ajax({
+      url: 'http://127.0.0.1:8081/voucher/category/addCategory',
+      type: 'POST',
+      //跨域
+      xhrFields: {
+        withCredentials: true
+      },
+      contentType: 'application/json',
+      data: JSON.stringify(data),
+      success: function (response) {
+        if (response.result) {
+          $.toasts({
+            type: 'info',
+            content: '添加分类成功',
+            delay: 1000,
+            onHidden: function () {
+              loadCategory();
+            }
+          });
+        } else {
+          var errorMessage = rock.errorText(response, "添加分类失败!");
+          $.toasts({
+            type: 'danger',
+            content: errorMessage,
+            delay: 3000,
+            onHidden: function () {
+              if (response.errorCode === "1075") {
+                $("#code").focus();
+              }
+              categoryNameInput.value = '';
+            }
+          });
+        }
+
+      }
+
+    });
+  });
+
+  // 监听输入框的输入变化
+  categoryNameInput.addEventListener('input', function () {
+    hideErrorMessage(); // 隐藏错误提示
+    categoryNameInput.classList.remove('error'); // 移除输入框的错误样式
+  });
+
+  // 显示错误提示
+  function showErrorMessage(message) {
+    // 如果已经存在错误提示元素，则更新其内容
+    if (errorElement) {
+      errorElement.textContent = message;
+      return;
+    }
+
+    // 创建新的错误提示元素
+    errorElement = document.createElement('div');
+    errorElement.classList.add('error-message');
+    errorElement.textContent = message;
+
+    // 插入到输入框的下方
+    categoryNameInput.parentNode.appendChild(errorElement);
+    categoryNameInput.classList.add('error'); // 添加输入框的错误样式
+  }
+
+  // 隐藏错误提示
+  function hideErrorMessage() {
+    if (errorElement) {
+      errorElement.parentNode.removeChild(errorElement);
+      errorElement = null; // 重置错误提示元素
+    }
+    categoryNameInput.classList.remove('error'); // 移除输入框的错误样式
+  }
+
+
+  $(function ($) {
+    loadCategory();
+
+    $("#form").formValidation({
+      //验证字段
+
+      fields: {
+        name: {
+          validators: {
+            notEmpty: {
+              message: '商品名称不能为空！'
+            },
+            stringLength: {
+              min: 1,
+              max: 20,
+              message: '商品名称长度必须在1到20个字符之间'
+            }
+          }
+        },
+
+
+        categoryId: {
+          validators: {
+            notEmpty: {
+              message: '请选择分类'
+            }
+          }
+        },
+        unit: {
+          validators: {
+            notEmpty: {
+              message: '请选择信息'
+            }
+          }
+        },
+
+
+      }
+    }).on('success.form.fv', function (e) {
+
+      //阻止表单提交
+      e.preventDefault();
+
+
+      //得到表单对象
+      let $form = $(e.target);
+      // 获取数据
+      let formData = $form.serializeArray();
+
+      // 定义要忽略的输入字段名称
+      let ignoredInputName = 'categoryName';
+
+
+      // 过滤 formData 数组，删除不想要的输入字段
+      let filteredFormData = formData.filter(item => {
+        return item.name !== ignoredInputName;
+      });
+      // 将过滤后的 formData 数组转换为对象
+      let formDataObject = {};
+      filteredFormData.forEach(item => {
+        formDataObject[item.name] = item.value;
+      });
+
+      // 将对象转换为 JSON 字符串
+      let serializedData = JSON.stringify(formDataObject);
+      console.log(serializedData);
+      //得到序列化数据
+      $.ajax({
+        url: "http://127.0.0.1:8081/voucher/product/addProduct",
+        method: 'post',
+        contentType: 'application/json',
+        data: serializedData,
+      }).then(response => {
+
+        if (response.result) {
+          $.toasts({
+            type: 'success',
+            content: '添加成功！',
+            delay: 1500,
+            autohide: true,
+            onHidden: function () {
+              parent.loadProduct(); // 调用父页面的 loadProduct 方法
+              parent.modalInstance.setData(true);
+              parent.modalInstance.close();
+
+            }
+          });
+        } else if (response.hasError) {
+          var errorMessage = rock.errorText(response, "添加失败!");
+          $.toasts({
+            type: 'danger',
+            content: errorMessage,
+            delay: 3050, // 将显示时间设置
+            onShown: function () {
+              console.log(response.errorCode)
+              if (response.errorCode === "1075") {
+                $("#code").focus();
+              }
+            }
+          });
+
+        }
+
+
+      });
+
+    });
+
+
+  });
 
 </script>
 </body>

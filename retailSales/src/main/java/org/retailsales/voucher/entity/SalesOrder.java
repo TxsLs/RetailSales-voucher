@@ -41,6 +41,10 @@ public class SalesOrder extends Entity {
     @Column(value = "f_purchase_date", tableAlias = "po", ignoreInsert = true, ignoreUpdate = true)
     private String purchaseDate;
 
+    @Schema(description = "计件方式", required = false, example = "5")
+    @Column(value = "f_unit", tableAlias = "p", ignoreInsert = true, ignoreUpdate = true)
+    private String unitName;
+
     @Schema(description = "库存数量", required = true, example = "3")
     @Column(value = "f_stock_quantity", tableAlias = "p", ignoreInsert = true, ignoreUpdate = true)
     private Long stockQuantity;

@@ -37,6 +37,10 @@ public class ReturnOrder extends Entity {
     @Schema(description = "退货时间", required = false, example = "2")
     private String returnDate;
 
+    @Schema(description = "计件方式", required = false, example = "5")
+    @Column(value = "f_unit", tableAlias = "p", ignoreInsert = true, ignoreUpdate = true)
+    private String unitName;
+
     @Schema(description = "退货数量", required = false, example = "2")
     private Long quantity;
 

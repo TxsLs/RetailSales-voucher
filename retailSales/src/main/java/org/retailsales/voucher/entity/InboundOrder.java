@@ -46,6 +46,10 @@ public class InboundOrder extends Entity {
     @Schema(description = "入库数量", required = true, example = "3")
     private Long quantity;
 
+    @Schema(description = "计件方式", required = false, example = "5")
+    @Column(value = "f_unit", tableAlias = "p", ignoreInsert = true, ignoreUpdate = true)
+    private String unitName;
+
     @Schema(description = "进货单价", required = false, example = "3")
     @Column(value = "f_price", tableAlias = "po", ignoreInsert = true, ignoreUpdate = true)
     private BigDecimal price;

@@ -81,18 +81,6 @@
             </div>
           </div>
 
-          <!-- <div class="row mb-3">
-            <label for="categoryId" class="col-sm-3 col-form-label text-sm-end">商品分类</label>
-            <div class="col-sm-9">
-              <div class="input-group">
-                <span class="input-group-text bg-white"><i class="bi bi-tags-fill"></i></span>
-                <select class="form-select" id="categoryId" name="categoryId" tabindex="6">
-                  <option value="">请选择分类</option>
-
-                </select>
-              </div>
-            </div>
-          </div> -->
 
           <!-- <div class="row mb-3">
             <label for="categoryName" class="col-sm-3 col-form-label text-sm-end">没有找到想要的分类？</label>
@@ -127,8 +115,10 @@
               <div class="input-group">
                 <span class="input-group-text bg-white"><i class="bi bi-bookmark-plus"></i></span>
                 <input type="text" class="form-control" id="supplierName" name="supplierName" maxlength="20"
-                       tabindex="2" aria-label="name" autocomplete="on" placeholder="添加供应商名称"
-                       data-bv-container="#err_username" pattern="^[\u4e00-\u9fa5A-Za-z0-9\uFF01-\uFFEF]{0,20}$">
+                       tabindex="2" aria-label="name" autocomplete="on"
+                       placeholder="名称加电话号 例如: 供应商-1234567890"
+                       data-bv-container="#err_username" pattern="^[\u4e00-\u9fa5A-Za-z]+-\d{10}$"
+                       title="格式: 字符串-10个数字，例如: 示例-1234567890">
                 <button type="submit" class="btn btn-primary" id="addSupplierButton">添加供应商</button>
               </div>
 
@@ -282,7 +272,7 @@
 
   // 获取按钮和输入框元素
   let addButtons = document.getElementById('addSupplierButton');
-  console.log(addButtons)
+
   let supplierNameInput = document.getElementById('supplierName');
   let errorElements = null; // 错误提示元素
 
@@ -300,9 +290,22 @@
       return; // 停止执行后续逻辑
     }
 
+    // 校验输入内容格式是否符合要求
+    let regex = /^[\u4e00-\u9fa5A-Za-z]+-\d{10}$/;
+    if (!regex.test(supplierName)) {
+      // 输入内容不符合格式要求，显示错误提示
+      showErrorMessage('格式必须为 字符串-10个数字');
+      return; // 停止执行后续逻辑
+    }
+
+// 分解输入内容，提取名字和电话号码
+    let name = supplierName.split('-')[0];
+    let phone = supplierName.split('-')[1];
+
     // 创建一个对象，包含要发送到后端的数据
     let data = {
-      name: supplierName
+      name: name,
+      phone: phone
     };
 
 
@@ -320,7 +323,7 @@
         if (response.result) {
           $.toasts({
             type: 'info',
-            content: '添加供应商名称成功',
+            content: '添加供应商',
             delay: 1000,
             onHidden: function () {
               loadSupplier();
@@ -333,7 +336,7 @@
             content: errorMessage,
             delay: 3000,
             onHidden: function () {
-              if (response.errorCode === "1076") {
+              if (response.errorCode === "1075") {
                 $("#code").focus();
               }
               supplierNameInput.value = '';
@@ -386,7 +389,8 @@
     loadSupplier();
 
     // 新增
-    $('.add-product').on('click', function () {
+    $('.add-product').on('click', function (event) {
+      event.preventDefault();
       // window :建议加上该前缀,否则在子页面中通过parent.modalInstance 获取不到该实例对象,因为它现在处于一个匿名函数里
       window.modalInstance = $.modal({
         url: 'add-product.html',
@@ -394,50 +398,9 @@
         //禁用掉底部的按钮区域
         buttons: [],
         modalDialogClass: 'modal-dialog-centered modal-lg',
-        onHidden: function (obj, data) {
-          if (data === true) {
-            //刷新当前数据表格
-            $('#table').bootstrapTable('refresh');
-            $('#table').bootstrapTable('selectPage', 1)//跳转到第一页
-          }
-        }
+
       })
     })
-
-    //   var ssoUser = null;  //当前用户
-    //   _root.loginUser({}, function (rtn) {
-
-    // if (rtn.hasError) {
-    //   alert(rock.errorText(rtn, "获得当前用户失败！"));
-    // } else {
-    //   ssoUser = rtn.result;
-    // }
-    // if (rock.isNull(ssoUser)) {
-    //   $.toasts({
-    //     type: 'danger',
-    //     content: '未登录！请返回登录!',
-    //     delay: 3000,
-    //     onHidden: function () {
-    //       top.location.replace('login.html');
-
-    //     }
-    //   });
-    // } else {
-
-    //照片上传字段设置
-    //   $("#profileImage").change((evt) => {
-    //     var ele = evt.target, url;
-    //     if (rock.isMsie()) {
-    //       url = ele.value;
-    //     } else {
-    //       var file = ele.files[0];
-    //       if (file) {
-    //         url = window.URL.createObjectURL(file);
-    //       }
-    //     }
-    //     $("#imgEditPhoto").attr("src", url);
-    //   });
-    //   $("#merchantId").attr("value", ssoUser.id);
 
 
     $("#form").formValidation({
@@ -471,6 +434,10 @@
             notEmpty: {
               message: '单价不能为空'
             },
+            regexp: {
+              regexp: /^\d+(\.\d{0,2})?$/,
+              message: '请输入最多两位小数的数字'
+            }
 
           }
         },
@@ -509,6 +476,7 @@
             }
           }
         },
+
         emp: {
           validators: {
             notEmpty: {
@@ -516,34 +484,12 @@
             }
           }
         },
-        // phone: {
-        //     validators: {
-        //         notEmpty: {
-        //             message: '电话号码不能为空'
-        //         },
-        //         regexp: {
-        //             regexp: /^\d{11}/,
-        //             message: '请输入有效的11位电话号码!'
-        //         }
-        //     }
-        // },
-        //   profileImage: {
-        //     validators: {
-        //       file: {
-        //         extension: 'jpeg,jpg,png,webp',
-        //         type: 'image/jpeg,image/png,webp',
-        //         maxSize: 5242880, // 5MB
-        //         message: '请选择小于5MB的JPEG或PNG格式图片文件'
-        //       }
-        //     }
-        //   }
-        //...
+
       }
     }).on('success.form.fv', function (e) {
 
       //阻止表单提交
       e.preventDefault();
-
 
       //得到表单对象
       let $form = $(e.target);
@@ -551,12 +497,13 @@
       let formData = $form.serializeArray();
 
       // 定义要忽略的输入字段名称
-      let ignoredInputName = 'categoryName';
+
       let ignoredSupplierName = 'supplierName';
+      let ignoredUnit = 'unit';
 
       // 过滤 formData 数组，删除不想要的输入字段
       let filteredFormData = formData.filter(item => {
-        return item.name !== ignoredInputName && item.name !== ignoredSupplierName;
+        return item.name !== ignoredSupplierName && item.name !== ignoredUnit.value;
       });
       // 将过滤后的 formData 数组转换为对象
       let formDataObject = {};

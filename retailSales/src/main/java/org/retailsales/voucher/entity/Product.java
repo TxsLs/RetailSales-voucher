@@ -27,18 +27,18 @@ public class Product extends Entity {
    /* @Schema(description = "商品价格", required = true, example = "3")
     private BigDecimal price;*/
 
-    @Schema(description = "商品库存", required = true, example = "4")
+    @Schema(description = "商品库存", required = false, example = "4")
     private Long stockQuantity;
 
-    @Schema(description = "上架数量", required = true, example = "4")
+    @Schema(description = "上架数量", required = false, example = "4")
     private Long onsaleQuantity;
 
-    @Schema(description = "商品分类编号", required = true, example = "5")
+    @Schema(description = "商品分类编号", required = false, example = "5")
     private Long categoryId;
 
-   /* @IgnoreInsertUpdate
-    @Schema(description = "商品状态", required = false, example = "6")
-    private Integer status;*/
+
+    @Schema(description = "计件方式", required = false, example = "6")
+    private String unit;
 
 
 }

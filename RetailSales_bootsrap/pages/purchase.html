@@ -62,8 +62,8 @@
           <div class="row">
             <label for="price" class="col-sm-auto col-form-label">商品单价</label>
             <div class="col">
-              <input type="text" class="form-control" id="price" name="price"
-                     pattern="^[\u4e00-\u9fa5A-Za-z0-9\uFF01-\uFFEF]{0,20}$" maxlength="20">
+              <input type="text" class="form-control" id="price" name="price" maxlength="20" tabindex="2"
+                     aria-label="name" autocomplete="on" maxlength="20">
             </div>
           </div>
         </div>
@@ -137,8 +137,8 @@
       <div id="toolbar" class="d-flex flex-wrap gap-2 mb-2">
         <button class="btn btn-light add-btn"><i class="bi bi-plus"></i> 新增进货单
         </button>
-        <!-- <button class="btn btn-light batch-btn" disabled><i class="bi bi-trash"></i> 批量删除</button> -->
-
+        <button class="btn btn-light batch-btn" disabled><i class="bi bi-trash"></i> 批量删除</button>
+        <button class="btn btn-light excel" disabled><i class="bi-download"></i> 导出</button>
       </div>
       <!--  数据表格    -->
       <table id="table"></table>
@@ -160,7 +160,7 @@
 <script src="../lib/bootstrap-select/dist/js/i18n/defaults-zh_CN.min.js"></script>
 <script src="../dist/js/bootstrap-admin.min.js"></script>
 <script src="../dist/js/app.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
 <script src="../dist/js/rockjs-1.0.js"></script>
 <script src="../pagejs/common.js"></script>
 <script>
@@ -486,6 +486,12 @@
           sortable: true,
         },
         {
+          title: '计件方式',
+          field: 'unitName',
+          align: 'center',
+          sortable: true,
+        },
+        {
           title: '进货总价',
           field: 'totalPrice',
           align: 'center',
@@ -538,31 +544,31 @@
           align: 'center',
           formatter: formatAction,
           events: {
-            // 'click .edit-btn': function (event, value, row, index) {
-            //     event.stopPropagation();
+            'click .edit-btn': function (event, value, row, index) {
+              event.stopPropagation();
 
-            //     window.modalInstance = $.modal({
-            //         onShow: function () {
-            //             // 将所选行的数据存储到 sessionStorage
-            //             sessionStorage.setItem('selectedUserData', JSON.stringify(row));
-            //         },
-            //         url: 'product-edit.html',
-            //         title: '编辑商品信息',
-            //         //禁用掉底部的按钮区域
-            //         buttons: [],
-            //         modalDialogClass: 'modal-dialog-centered modal-lg',
-            //         onHidden: function (obj, data) {
-            //             if (data === true) {
-            //                 //刷新当前数据表格
-            //                 $('#table').bootstrapTable('refresh');
-            //                 $('#table').bootstrapTable('selectPage', 1)//跳转到第一页
-            //             }
-            //             // 使用完数据后清除 sessionStorage 中的数据
-            //             sessionStorage.removeItem('selectedUserData');
-            //         }
-            //     });
+              window.modalInstance = $.modal({
+                onShow: function () {
+                  // 将所选行的数据存储到 sessionStorage
+                  sessionStorage.setItem('selectedUserData', JSON.stringify(row));
+                },
+                url: 'product-edit.html',
+                title: '修改进货单',
+                //禁用掉底部的按钮区域
+                buttons: [],
+                modalDialogClass: 'modal-dialog-centered modal-lg',
+                onHidden: function (obj, data) {
+                  if (data === true) {
+                    //刷新当前数据表格
+                    $('#table').bootstrapTable('refresh');
+                    $('#table').bootstrapTable('selectPage', 1)//跳转到第一页
+                  }
+                  // 使用完数据后清除 sessionStorage 中的数据
+                  sessionStorage.removeItem('selectedUserData');
+                }
+              });
 
-            // },
+            },
             'click .ban-btn': function (event, value, row, index) {
               event.stopPropagation();
               window.modalInstance = $.modal({
@@ -633,7 +639,7 @@
             'click .del-btn': function (event, value, row, index) {
               event.stopPropagation();
               window.modalInstance = $.modal({
-                body: '确定要删除此商品：' + row.name + '?',
+                body: '确定要删除：' + row.id + '进货单?',
                 cancelBtn: true,
                 ok: function () {
 
@@ -642,14 +648,14 @@
                     xhrFields: {
                       withCredentials: true
                     },
-                    url: 'http://127.0.0.1:8082/hanfushopping/product/remove',
+                    url: 'http://127.0.0.1:8081/voucher/purchase/remove',
                     method: 'get',
                     data: {id: row.id},
                   }).then(response => {
                     if (response.result) {
                       $.toasts({
                         type: 'success',
-                        content: '删除商品成功！',
+                        content: '删除成功！',
                         delay: 1500,
                         onHidden: function () {
                           //刷新当前数据表格
@@ -812,7 +818,7 @@
 
       //发送ajax
       $.modal({
-        body: '确定要删除所选中的' + id.length + '个商品？',
+        body: '确定要删除所选中的' + id.length + '个进货单？',
         cancelBtn: true,
         ok: function () {
           $.ajax({
@@ -820,14 +826,14 @@
             xhrFields: {
               withCredentials: true
             },
-            url: 'http://127.0.0.1:8082/hanfushopping/product/removeMore',
+            url: 'http://127.0.0.1:8081/voucher/purchase/removeMore',
             method: 'get',
             data: {id},
           }).then(response => {
             if (response.result) {
               $.toasts({
                 type: 'success',
-                content: '删除商品成功！',
+                content: '删除成功！',
                 delay: 1500,
                 onHidden: function () {
                   //刷新当前数据表格
@@ -847,6 +853,74 @@
     })
 
 
+// 导出按钮点击事件
+    $('.excel').on('click', function () {
+      // 获取所有选中行的数据
+      let selectedRows = $("#table").bootstrapTable('getSelections');
+
+      // 如果没有选中行，则不执行导出操作
+      if (selectedRows.length === 0) {
+        alert("请先选择要导出的行！");
+        return;
+      }
+
+      // 获取选中行中的时间数据
+      let dates = selectedRows.map(row => new Date(row.purchaseDate));
+
+      // 确定时间段
+      let minDate = new Date(Math.min.apply(null, dates));
+      let maxDate = new Date(Math.max.apply(null, dates));
+      let period = `${minDate.getFullYear()}年${minDate.getMonth() + 1}月${minDate.getDate()}日 ${minDate.getHours()}:${minDate.getMinutes()}:${minDate.getSeconds()} 至 ${maxDate.getFullYear()}年${maxDate.getMonth() + 1}月${maxDate.getDate()}日 ${maxDate.getHours()}:${maxDate.getMinutes()}:${maxDate.getSeconds()}`;
+
+      // 设置导出文件名
+      let fileName = `${period} 进货单`;
+
+      // 将选中行数据转换为 Excel 的工作簿
+      let workbook = XLSX.utils.book_new();
+
+      // 创建工作表
+      let worksheet = XLSX.utils.aoa_to_sheet([
+        [{
+          v: `进货单据 (${period})`,
+          s: {fontSize: 14, bold: true, alignment: {horizontal: "center", vertical: "center"}}
+        }], // 设置表头样式
+        ['单据编号', '商品名称', '分类名称', '进货单价', '进货数量', '计件方式', '进货总价', '进货时间', '供应商名称', '供应商联系方式']
+      ]);
+
+      // 填充数据
+      selectedRows.forEach(row => {
+        let rowData = [
+          row.id,
+          row.productName,
+          row.categoryName,
+          `￥${row.price}`,
+          row.quantity,
+          row.unitName,
+          `￥${row.totalPrice}`,
+          row.purchaseDate,
+          row.supplierName,
+          row.supplierPhone
+        ];
+        XLSX.utils.sheet_add_aoa(worksheet, [rowData], {origin: -1});
+      });
+
+      // 设置表头样式
+      let headerRange = XLSX.utils.decode_range(worksheet['!ref']);
+      for (let col = headerRange.s.c; col <= headerRange.e.c; col++) {
+        let cellAddress = XLSX.utils.encode_cell({r: headerRange.s.r, c: col});
+        if (worksheet[cellAddress]) {
+          worksheet[cellAddress].s = {fontSize: 14, bold: true, alignment: {horizontal: "center", vertical: "center"}};
+        }
+      }
+
+      // 将工作表添加到工作簿
+      XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+
+      // 导出 Excel 表格
+      XLSX.writeFile(workbook, `${fileName}.xlsx`);
+    });
+
+
     function ignoreClickToSelectOn(e) {
       return $(e).hasClass('form-check-input');
     }
@@ -857,8 +931,10 @@
       let rowSelected = $("#table").bootstrapTable('getSelections');
       if (rowSelected.length > 0) {
         $('.batch-btn').attr('disabled', false)
+        $('.excel').prop('disabled', false);
       } else {
         $('.batch-btn').attr('disabled', true)
+        $('.excel').prop('disabled', true);
       }
     }
 

@@ -41,6 +41,10 @@ public class PurchaseOrder extends Entity {
     @Column(value = "f_name", tableAlias = "p", ignoreInsert = true, ignoreUpdate = true)
     private String productName;
 
+    @Schema(description = "计件方式", required = false, example = "5")
+    @Column(value = "f_unit", tableAlias = "p", ignoreInsert = true, ignoreUpdate = true)
+    private String unitName;
+
     @Schema(description = "分类名称", required = false, example = "6")
     @Column(value = "f_name", tableAlias = "cg", ignoreInsert = true, ignoreUpdate = true)
     private String categoryName;
