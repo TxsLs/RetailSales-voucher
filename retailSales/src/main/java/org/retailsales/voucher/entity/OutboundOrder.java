@@ -21,6 +21,10 @@ public class OutboundOrder extends Entity {
     @Schema(description = "商品id", required = true, example = "1")
     private Long productId;
 
+    @Schema(description = "分类名称", required = false, example = "6")
+    @Column(value = "f_id", tableAlias = "cg", ignoreInsert = true, ignoreUpdate = true)
+    private String categoryId;
+
     @Schema(description = "商品名称", required = false, example = "5")
     @Column(value = "f_name", tableAlias = "p", ignoreInsert = true, ignoreUpdate = true)
     private String productName;
@@ -44,7 +48,7 @@ public class OutboundOrder extends Entity {
     private Long quantity;
 
     @Schema(description = "上架数量", required = true, example = "4")
-    @Column(value = "f_stock_quantity", tableAlias = "p", ignoreInsert = true, ignoreUpdate = true)
+    @Column(value = "f_onsale_quantity", tableAlias = "p", ignoreInsert = true, ignoreUpdate = true)
     private Long onsaleQuantity;
 
 

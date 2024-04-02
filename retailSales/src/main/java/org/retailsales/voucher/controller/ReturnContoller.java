@@ -12,42 +12,57 @@ import org.quincy.rock.core.dao.sql.Sort;
 import org.quincy.rock.core.vo.PageSet;
 import org.quincy.rock.core.vo.Result;
 import org.retailsales.voucher.BaseController;
-import org.retailsales.voucher.entity.PurchaseOrder;
-import org.retailsales.voucher.entity.ReturnOrder;
+import org.retailsales.voucher.entity.*;
+import org.retailsales.voucher.service.ProductService;
 import org.retailsales.voucher.service.ReturnService;
+import org.retailsales.voucher.service.SaleService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "退货单管理", description = "tuihuodan")
 @Slf4j
 @Controller
 @RequestMapping("/return")
 public class ReturnContoller extends BaseController<ReturnOrder, ReturnService> {
-
+    @Autowired
+    SaleService saleService;
+    @Autowired
+    ProductService productservice;
 
     @Operation(summary = "条件分页查询", description = "")
     @GetMapping("/queryPage")
     public @ResponseBody Result<PageSet<ReturnOrder>> queryPage(
             @Parameter(description = "名称(支持like)，允许null") @RequestParam(required = false) String productName,
             @Parameter(description = "排序规则字符串") @RequestParam(required = false) String sort,
-            @Parameter(description = "排序规则字符串") @RequestParam(required = false) String price,
+            @Parameter(description = "排序规则字符串") @RequestParam(required = false) String totalPrice,
+            @Parameter(description = "categoryid") @RequestParam(required = false) String categoryId,
+            @Parameter(description = "supplierId") @RequestParam(required = false) String supplierId,
             @Parameter(description = "categoryName") @RequestParam(required = false) String categoryName,
-            @Parameter(description = "排序规则字符串") @RequestParam(required = false) String stockQuantity,
+            @Parameter(description = "排序规则字符串") @RequestParam(required = false) String quantity,
+            @Parameter(description = "起始时间") @RequestParam(required = false) String joinTime,
+            @Parameter(description = "结束时间") @RequestParam(required = false) String endTime,
             @Parameter(description = "页码", required = true) @RequestParam long pageNum,
             @Parameter(description = "页大小", required = true) @RequestParam int pageSize) {
         log.debug("call purchase");
         Predicate where = DaoUtil.and();
         if (StringUtils.isNotEmpty(productName))
             where.like("productName", productName);
-        if (StringUtils.isNotEmpty(price))
-            where.like("price", price);
-        if (StringUtils.isNotEmpty(stockQuantity))
-            where.like("stockQuantity", stockQuantity);
+        if (StringUtils.isNotEmpty(totalPrice))
+            where.equal("totalPrice", totalPrice);
+        if (StringUtils.isNotEmpty(quantity))
+            where.equal("quantity", quantity);
+        if (StringUtils.isNotEmpty(categoryId))
+            where.like("categoryId", categoryId);
+        if (StringUtils.isNotEmpty(supplierId))
+            where.like("supplierId", supplierId);
         if (StringUtils.isNotEmpty(categoryName))
             where.like("categoryName", categoryName);
+        if (StringUtils.isNotEmpty(joinTime) && StringUtils.isNotEmpty(endTime)) {
+            where.between("saleDate", joinTime, endTime); // created_time为时间字段名
+        }
 
        /* if (StringUtils.isNotEmpty(status))
             where.like("status", status);
@@ -59,6 +74,59 @@ public class ReturnContoller extends BaseController<ReturnOrder, ReturnService> 
         //		where.equal(DataType.LONG, "workstateId", workstateId.toString());
         PageSet<ReturnOrder> ps = this.service().findPage(where, Sort.parse(sort), pageNum, pageSize);
         return Result.toResult(ps);
+    }
+
+    @Operation(summary = "加chu库单", description = "")
+    @PostMapping("/addReturn")
+    public @ResponseBody Result<Boolean> addOutbound(@RequestBody ReturnOrder vo) {
+        log.debug("call addReturn!");
+        boolean re = saleService.existByName("productId", vo.getProductId(), null);
+
+        if (re == false) {
+            return Result.toResult("1077", "此商品没有出售");
+        }
+        List<SalesOrder> salesOrders = saleService.findAllByName("productId", vo.getProductId(), null);
+        // 初始化总数量为0
+        int totalQuantity = 0;
+// 遍历 purchase 列表并累加数量
+        for (SalesOrder order : salesOrders) {
+            totalQuantity += order.getQuantity();
+        }
+        boolean result;
+        if (totalQuantity >= vo.getQuantity()) {
+            result = this.service().insert(vo, true);
+            return Result.of(result);
+        } else {
+            return Result.toResult("1077", "退货的商品数量不能大于销售数量！*^____^*");
+        }
+
+    }
+
+    @Operation(summary = "修改单", description = "")
+    @PostMapping("/updateReturn")
+    public @ResponseBody Result<Boolean> updateInbound(@RequestBody ReturnOrder vo) {
+        log.debug("call updateReturn!");
+        boolean re = saleService.existByName("productId", vo.getProductId(), null);
+
+        if (re == false) {
+            return Result.toResult("1077", "此商品没有出售");
+        }
+        List<SalesOrder> salesOrders = saleService.findAllByName("productId", vo.getProductId(), null);
+        // 初始化总数量为0
+        int totalQuantity = 0;
+// 遍历 purchase 列表并累加数量
+        for (SalesOrder order : salesOrders) {
+            totalQuantity += order.getQuantity();
+        }
+
+        boolean result;
+        if (totalQuantity >= vo.getQuantity()) {
+            result = this.service().update(vo, true, null);
+            return Result.of(result);
+        } else {
+            return Result.toResult("1077", "退货的商品数量不能大于销售数量！*^____^*");
+        }
+
     }
 
 }

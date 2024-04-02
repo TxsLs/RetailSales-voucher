@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="../lib/@eonasdan/tempus-dominus/dist/css/tempus-dominus.min.css"/>
   <link rel="stylesheet" href="../lib/bootstrap-select/dist/css/bootstrap-select.min.css">
   <link rel="stylesheet" href="../dist/css/bootstrap-admin.min.css">
-  <title>进货单据</title>
+  <title>入库单据</title>
 </head>
 
 <body class="bg-body-tertiary py-3">
@@ -70,7 +70,7 @@
 
         <div class="col-12">
           <div class="row">
-            <label for="quantity" class="col-sm-auto col-form-label">进货数量</label>
+            <label for="quantity" class="col-sm-auto col-form-label">入库数量</label>
             <div class="col">
               <input type="text" class="form-control" id="quantity" name="quantity"
                      pattern="^[\u4e00-\u9fa5A-Za-z0-9\uFF01-\uFFEF]{0,20}$" maxlength="20">
@@ -135,7 +135,7 @@
     <div class="card-body">
       <!--  表格上方左侧的工具条区域    -->
       <div id="toolbar" class="d-flex flex-wrap gap-2 mb-2">
-        <button class="btn btn-light add-btn"><i class="bi bi-plus"></i> 新增进货单
+        <button class="btn btn-light add-btn"><i class="bi bi-plus"></i> 新增入库单
         </button>
         <button class="btn btn-light batch-btn" disabled><i class="bi bi-trash"></i> 批量删除</button>
         <button class="btn btn-light excel" disabled><i class="bi-download"></i> 导出</button>
@@ -240,7 +240,6 @@
     //   alert(rock.errorText(rtn, "连接到服务器失败！"));
     // } else if (rtn.notNull && rtn.result.admin == 0) {
 
-
     // 销毁第一个表格实例
     $('#table').bootstrapTable('destroy');
     $('#table').bootstrapTable({
@@ -249,7 +248,7 @@
       //设置高度就可以固定表头
       // height: 500,
       //请求地址
-      url: 'http://localhost:8081/voucher/purchase/queryPage',
+      url: 'http://localhost:8081/voucher/inbound/queryPage',
       queryParamsType: "page",
       responseHandler: function (res) {
         var data = {};
@@ -379,30 +378,7 @@
           new bootstrap.Tooltip(el)
         })
       },
-      //回调函数修改图片元素
-      // onLoadSuccess: function (data) {
-      //   //重新启用弹出层,否则formatter格式化函数返回的html字符串上的tooltip提示不生效
-      //   $('[data-bs-toggle="tooltip"]').each(function (i, el) {
-      //     new bootstrap.Tooltip(el)
-      //   });
-      //   // 在这里遍历每一行数据，并插入图片
-      //   var rows = data.rows;
-      //   var mvc = rock.initSvr(["product"]);
-      //   var productService = mvc.findService("product");
-      //   for (var i = 0; i < rows.length; i++) {
-      //     var row = rows[i];
-      //     var hasPhoto = $('#table').bootstrapTable("getRowByUniqueId", row.id).hasPhoto;
 
-      //     // var $imgPhoto = $('#table').find("img.img-photo");
-      //     // 找到目标行内的图片元素
-      //     var $imgPhoto = $('#table').find("tr[data-uniqueid='" + row.id + "'] img.img-photo");
-      //     if (hasPhoto) {
-      //       $imgPhoto.attr("src", productService.url("photo") + "?id=" + row.id);
-      //     } else {
-      //       $imgPhoto.attr("src", "../dist/img/nophoto.png");
-      //     }
-      //   }
-      // },
 
       //params是一个对象
       queryParams: function (options) {
@@ -417,37 +393,23 @@
         param.sortOrder = options.sortOrder;
         return param;
 
-        // return {
-        //   // 每页数据量
-        //   limit: params.limit,
-        //   // sql语句起始索引
-        //   offset: params.offset,
-        //   page: (params.offset / params.limit) + 1,
-        //   // 排序的列名
-        //   sort: params.sort,
-        //   // 排序方式 'asc' 'desc'
-        //   sortOrder: params.order,
-        //   //关键词
-        //   keywords: $('input[name=keyword]').val(),
-        //   //开始时间
-        //   beginTime: $('#beginTime').val(),
-        //   //结束时间
-        //   endTime: $('#endTime').val(),
-        // }
       },
+
 
       onLoadSuccess: function (data) {
         var data = $('#table').bootstrapTable('getData', true);
         //合并单元格
         mergeCells(data, "productName", 1, $('#table'));
+        mergeCells(data, "id", 1, $('#table'));
         mergeCells(data, "categoryName", 1, $('#table'));
         mergeCells(data, "quantity", 1, $('#table'));
+        mergeCells(data, "stockQuantity", 1, $('#table'));
         mergeCells(data, "unitName", 1, $('#table'));
+        mergeCells(data, "inboundDate", 1, $('#table'));
         mergeCells(data, "supplierName", 1, $('#table'));
         mergeCells(data, "purchaseDate", 1, $('#table'));
         mergeCells(data, "emp", 1, $('#table'));
       },
-
 
       //列
       columns: [
@@ -469,13 +431,15 @@
           // 列的宽度
           width: 5,
           // 宽度单位
-          widthUnit: 'rem'
+          widthUnit: 'rem',
+
         },
         {
           title: '商品名称',
           field: 'productName',
           align: 'center',
           sortable: true,
+
         },
         {
           title: '分类名称',
@@ -494,10 +458,23 @@
           }
         },
         {
-          title: '进货数量',
+          title: '入库数量',
           field: 'quantity',
           align: 'center',
           sortable: true,
+        },
+        {
+          title: '库存数量',
+          field: 'stockQuantity',
+          align: 'center',
+          sortable: true,
+          formatter: function (value, row, index) {
+            if (value < 0) {
+              return `缺货${Math.abs(value)}`;
+            } else {
+              return value.toString(); // 可以根据需要添加其他格式化逻辑
+            }
+          }
         },
         {
           title: '计件方式',
@@ -516,6 +493,13 @@
           }
         },
         {
+          title: '入库时间',
+          field: 'inboundDate',
+          align: 'center',
+          sortable: true,
+          //formatter: formatContent,
+        },
+        {
           title: '进货时间',
           field: 'purchaseDate',
           align: 'center',
@@ -529,21 +513,6 @@
           sortable: true,
         },
 
-        {
-          title: '供应商联系方式',
-          field: 'supplierPhone',
-          align: 'center',
-          sortable: true,
-        },
-
-
-        // {
-        //   title: '商品图片',
-        //   align: 'center',
-        //   formatter: function (value, row, index) {
-        //     return '<img src="' + value + '" class="img-photo" style="max-width: 100%;max-height:100%">';
-        //   }
-        // },
 
         {
           title: '操作人',
@@ -552,6 +521,7 @@
           sortable: true,
           //formatter: formatStatus,
         },
+
 
         {
           title: '操作',
@@ -566,8 +536,8 @@
                   // 将所选行的数据存储到 sessionStorage
                   sessionStorage.setItem('selectedUserData', JSON.stringify(row));
                 },
-                url: 'purchase-edit.html',
-                title: '修改进货单',
+                url: 'inbound-edit.html',
+                title: '修改入库单',
                 //禁用掉底部的按钮区域
                 buttons: [],
                 modalDialogClass: 'modal-dialog-centered modal-lg',
@@ -583,77 +553,12 @@
               });
 
             },
-            'click .ban-btn': function (event, value, row, index) {
-              event.stopPropagation();
-              window.modalInstance = $.modal({
 
-                onShow: function () {
-                  // 将所选行的数据存储到 sessionStorage
-                  sessionStorage.setItem('selectedUserData', JSON.stringify(row));
-                },
-                url: 'ban_shops.html',
-                title: '封禁此商品',
-                //禁用掉底部的按钮区域
-                buttons: [],
-                modalDialogClass: 'modal-dialog-centered modal-lg',
-                onHidden: function (obj, data) {
-                  if (data === true) {
-                    //刷新当前数据表格
-                    $('#table').bootstrapTable('refresh');
-                    $('#table').bootstrapTable('selectPage', 1)//跳转到第一页
-                  }
-                  // 使用完数据后清除 sessionStorage 中的数据
-                  sessionStorage.removeItem('selectedUserData');
-                }
-
-              })
-
-            },
-
-            'click .dw-btn': function (event, value, row, index) {
-              event.stopPropagation();
-              window.modalInstance = $.modal({
-                body: '确定要下架此商品：' + row.name + '?',
-                cancelBtn: true,
-                ok: function () {
-
-                  $.ajax({
-                    //跨域
-                    xhrFields: {
-                      withCredentials: true
-                    },
-                    url: 'http://127.0.0.1:8082/hanfushopping/product/updateProduct',
-                    method: 'post',
-                    data: {status: 0, id: row.id},
-                  }).then(response => {
-                    if (response.result) {
-                      $.toasts({
-                        type: 'success',
-                        content: '下架商品成功！',
-                        delay: 1500,
-                        onHidden: function () {
-                          //刷新当前数据表格
-                          $('#table').bootstrapTable('refresh');
-                          $('#table').bootstrapTable('selectPage', 1)//跳转到第一页
-                        }
-                      })
-                    }
-                  });
-
-                }, cancel: function () {
-                  //刷新当前数据表格
-                  $('#table').bootstrapTable('refresh');
-                  $('#table').bootstrapTable('selectPage', 1)//跳转到第一页
-
-                }
-              })
-
-            },
 
             'click .del-btn': function (event, value, row, index) {
               event.stopPropagation();
               window.modalInstance = $.modal({
-                body: '确定要删除：' + row.id + '进货单?',
+                body: '确定要删除：' + row.id + '入库单?',
                 cancelBtn: true,
                 ok: function () {
 
@@ -662,7 +567,7 @@
                     xhrFields: {
                       withCredentials: true
                     },
-                    url: 'http://127.0.0.1:8081/voucher/purchase/remove',
+                    url: 'http://127.0.0.1:8081/voucher/inbound/remove',
                     method: 'get',
                     data: {id: row.id},
                   }).then(response => {
@@ -690,131 +595,6 @@
 
             },
 
-
-            'click .show-btn': function (event, value, row, index) {
-              event.stopPropagation();
-              window.modalInstance = $.modal({
-                onShow: function () {
-                  // 将所选行的数据存储到 sessionStorage
-                  sessionStorage.setItem('ProductData', row.id);
-                },
-                url: 'product-show.html',
-                title: '查看评价详情',
-                //禁用掉底部的按钮区域
-                buttons: [],
-                modalDialogClass: 'modal-dialog-centered modal-lg',
-                onHidden: function (obj, data) {
-                  // 使用完数据后清除 sessionStorage 中的数据
-                  sessionStorage.removeItem('ProductData');
-                }
-              });
-
-            },
-
-
-            'click .unlock-btn': function (event, value, row, index) {
-              event.stopPropagation();
-
-              $.ajax({
-                //跨域
-                xhrFields: {
-                  withCredentials: true
-                },
-                //url: 'http://127.0.0.1:8080/hanfu/ban/queryByName?propName=userId&propValue=' + encodeURIComponent(row.id),
-                url: 'http://127.0.0.1:8081/hanfu/ban/queryByBanId',
-                method: 'get',
-                data: {
-                  userId: row.id,
-                  type: 4
-                },
-              }).then(response => {
-
-                //用数组在取出时单个的reason不会拆开
-                var reasons = [];
-                response.result.forEach(ban => {
-                  //reasons += ban.reason;
-                  reasons.push(ban.reason);
-                });
-
-
-                // var times = '';
-                // response.result.forEach(ban => {
-                //   times += ban.beginTime ;
-                // });
-                // console.log(times)
-
-                // 遍历所有 Ban 对象，将 beginTime 格式化为日期时间字符串
-                var formattedBeginTimes = response.result.map(ban => {
-                  // 将时间戳转换为 Date 对象
-                  var beginTime = new Date(ban.beginTime);
-                  // 使用 Intl.DateTimeFormat 对象进行格式化
-                  var formattedBeginTime = new Intl.DateTimeFormat('zh-CN', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
-                  }).format(beginTime);
-                  return formattedBeginTime;
-                });
-
-                // 将格式化后的 beginTime 数组和 reasons 字符串连接起来
-                var bodyContent = '';
-                for (var i = 0; i < formattedBeginTimes.length; i++) {
-                  bodyContent += '封禁日期：' + formattedBeginTimes[i] + '<br>';
-                  bodyContent += '封禁理由：' + reasons[i] + '<br><br>';
-                }
-                // // 将时间戳转换为 Date 对象
-                // var beginTime = new Date(times);
-                // // 使用日期时间格式函数格式化日期时间
-                // var formattedBeginTime = beginTime.getFullYear() + '-' + (beginTime.getMonth() + 1) + '-' + beginTime.getDate() + ' ' +
-                //   beginTime.getHours() + ':' + beginTime.getMinutes() + ':' + beginTime.getSeconds();
-
-                window.modalInstance = $.modal({
-
-                  body: '确定要解封此商品:\n' + row.name + '&nbsp??' + '<br><br>' + '此商品已被封禁\n' + response.result.length + '\n次' + '<br><br>' + bodyContent,
-
-                  cancelBtn: true,
-
-                  ok: function () {
-                    $.ajax({
-                      //跨域
-                      xhrFields: {
-                        withCredentials: true
-                      },
-                      url: 'http://127.0.0.1:8081/hanfu/product/updateProduct',
-                      method: 'post',
-                      data: {empStatus: 1, id: row.id},
-                    }).then(response => {
-                      if (response.result) {
-                        $.toasts({
-                          type: 'success',
-                          content: '解封成功！',
-                          delay: 1500,
-                          onHidden: function () {
-                            //刷新当前数据表格
-                            $('#table').bootstrapTable('refresh');
-                            $('#table').bootstrapTable('selectPage', 1)//跳转到第一页
-                          }
-                        })
-                      }
-                    });
-
-                  }, cancel: function () {
-                    //刷新当前数据表格
-                    $('#table').bootstrapTable('refresh');
-                    $('#table').bootstrapTable('selectPage', 1)//跳转到第一页
-
-                  }
-
-
-                })
-
-
-              });
-
-            }
           }
         }
       ]
@@ -861,7 +641,6 @@
       }
     }
 
-
     //批量处理
     $('.batch-btn').on('click', function () {
       //获取所有选中行的id
@@ -873,7 +652,7 @@
 
       //发送ajax
       $.modal({
-        body: '确定要删除所选中的' + id.length + '个进货单？',
+        body: '确定要删除所选中的' + id.length + '个入库单？',
         cancelBtn: true,
         ok: function () {
           $.ajax({
@@ -881,7 +660,7 @@
             xhrFields: {
               withCredentials: true
             },
-            url: 'http://127.0.0.1:8081/voucher/purchase/removeMore',
+            url: 'http://127.0.0.1:8081/voucher/inbound/removeMore',
             method: 'get',
             data: {id},
           }).then(response => {
@@ -907,7 +686,6 @@
       })
     })
 
-
 // 导出按钮点击事件
     $('.excel').on('click', function () {
       // 获取所有选中行的数据
@@ -920,7 +698,7 @@
       }
 
       // 获取选中行中的时间数据
-      let dates = selectedRows.map(row => new Date(row.purchaseDate));
+      let dates = selectedRows.map(row => new Date(row.inboundDate));
 
       // 确定时间段
       let minDate = new Date(Math.min.apply(null, dates));
@@ -928,7 +706,7 @@
       let period = `${minDate.getFullYear()}年${minDate.getMonth() + 1}月${minDate.getDate()}日 ${minDate.getHours()}:${minDate.getMinutes()}:${minDate.getSeconds()} 至 ${maxDate.getFullYear()}年${maxDate.getMonth() + 1}月${maxDate.getDate()}日 ${maxDate.getHours()}:${maxDate.getMinutes()}:${maxDate.getSeconds()}`;
 
       // 设置导出文件名
-      let fileName = `${period} 进货单`;
+      let fileName = `${period} 入库单`;
 
       // 将选中行数据转换为 Excel 的工作簿
       let workbook = XLSX.utils.book_new();
@@ -936,10 +714,10 @@
       // 创建工作表
       let worksheet = XLSX.utils.aoa_to_sheet([
         [{
-          v: `进货单据 (${period})`,
+          v: `入库单据 (${period})`,
           s: {fontSize: 14, bold: true, alignment: {horizontal: "center", vertical: "center"}}
         }], // 设置表头样式
-        ['单据编号', '商品名称', '分类名称', '进货单价', '进货数量', '计件方式', '进货总价', '进货时间', '供应商名称', '供应商联系方式', '操作人']
+        ['单据编号', '商品名称', '分类名称', '进货单价', '入库数量', '库存数量', '计件方式', '进货总价', '入库时间', '进货时间', '供应商名称', '供应商联系方式', '操作人']
       ]);
 
       // 定义单元格合并信息数组
@@ -953,25 +731,21 @@
           row.categoryName,
           {v: `￥${row.price}`, t: 's'}, // 将价格设置为字符串类型，以保留货币符号
           row.quantity,
+          row.stockQuantity,
           row.unitName,
           {v: `￥${row.totalPrice}`, t: 's'}, // 将总价设置为字符串类型，以保留货币符号
+          row.inboundDate,
           row.purchaseDate,
           row.supplierName,
           row.supplierPhone,
           row.emp
         ];
         XLSX.utils.sheet_add_aoa(worksheet, [rowData], {origin: -1});
-
-        // 记录合并的单元格信息
-        merges.push({
-          s: {r: index + 2, c: 3}, // 合并的起始单元格位置
-          e: {r: index + 2, c: 4} // 合并的结束单元格位置
-        });
-        merges.push({
-          s: {r: index + 2, c: 6}, // 合并的起始单元格位置
-          e: {r: index + 2, c: 7} // 合并的结束单元格位置
-        });
       });
+
+      // 合并整个表格数据到一个大单元格
+      let mergeRange = XLSX.utils.decode_range(worksheet['!ref']);
+      worksheet['!merges'] = [{s: {r: mergeRange.s.r, c: mergeRange.s.c}, e: {r: mergeRange.e.r, c: mergeRange.e.c}}];
 
       // 设置合并单元格
       worksheet['!merges'] = merges;
@@ -1075,10 +849,10 @@
 
       //第二个按钮
       html += `<button type="button" class="btn btn-light mx-1 btn-sm edit-btn" data-bs-toggle="tooltip" data-bs-placement="top"
-        data-bs-title="修改进货单信息"><i class="bi bi-pencil"></i></button>`;
+        data-bs-title="修改入库单信息"><i class="bi bi-pencil"></i></button>`;
 
       html += `<button type="button" class="btn btn-light btn-sm del-btn" data-bs-toggle="tooltip" data-bs-placement="top"
-       data-bs-title="删除进货单"><i class="bi bi-trash-fill"></i></button>`
+       data-bs-title="删除入库单"><i class="bi bi-trash-fill"></i></button>`
 
       //第三个按钮
       //   html += `<button type="button" class="btn btn-light btn-sm del-btn" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -1310,12 +1084,13 @@
 
   $(document).ready(function () {
 
+
     // 新增
     $('.add-btn').on('click', function () {
       // window :建议加上该前缀,否则在子页面中通过parent.modalInstance 获取不到该实例对象,因为它现在处于一个匿名函数里
       window.modalInstance = $.modal({
-        url: 'purchase-add.html',
-        title: '新增进货单',
+        url: 'inbound-add.html',
+        title: '新增入库单',
         //禁用掉底部的按钮区域
         buttons: [],
         modalDialogClass: 'modal-dialog-centered modal-lg',

@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="zh">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <link rel="icon" href="dist/img/hualogo.gif" sizes="32x32" type="image/gif">
+  <link rel="icon" href="dist/img/hualogo.gif" sizes="16x16" type="image/gif">
+  <meta name="keywords" content="门店单据管理系统">
+  <meta name="description" content="门店单据管理系统">
+  <meta name="author" content="ajiho">
+  <link rel="stylesheet" href="../lib/bootstrap-icons/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../dist/css/bootstrap-admin.min.css">
+  <title>销售单信息</title>
+</head>
+
+<body class="bg-body-tertiary py-3">
+<div class="container-fluid">
+  <div class="card border-0 shadow-sm">
+    <div class="card-body">
+      <form id="form">
+
+
+        <div class="row mb-3" id="hide_id">
+          <label for="id" class="col-sm-3 col-form-label text-sm-end">Id</label>
+          <div class="col-sm-9">
+            <div class="input-group">
+              <span class="input-group-text bg-white"><i class="bi bi-person-vcard"></i></span>
+              <input type="text" class="form-control" id="id" name="id" tabindex="1" autocomplete="on" placeholder=""
+                     required data-bv-container="#err_username" readonly>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row mb-3">
+          <label for="productId" class="col-sm-3 col-form-label text-sm-end">商品名称</label>
+          <div class="col-sm-9">
+            <div class="input-group">
+              <span class="input-group-text bg-white"><i class="bi bi-tags-fill"></i></span>
+              <select class="form-select" id="productId" name="productId" tabindex="6">
+                <option value="">请选择商品</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row mb-3">
+          <label for="quantity" class="col-sm-3 col-form-label text-sm-end">退货数量</label>
+          <div class="col-sm-9">
+            <div class="input-group">
+              <span class="input-group-text bg-white"><i class="bi bi-basket"></i></span>
+              <input type="number" class="form-control" id="quantity" name="quantity" maxlength="20" tabindex="2"
+                     aria-label="name" autocomplete="on" placeholder="请输入商品退货数量"
+                     data-bv-container="#err_username"
+                     pattern="^\d{0,20}$">
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label for="reason" class="col-sm-3 col-form-label text-sm-end">退货原因</label>
+          <div class="col-sm-9">
+            <div class="input-group">
+              <span class="input-group-text bg-white"><i class="bi bi-window-dock"></i></span>
+              <textarea class="form-control" id="reason" rows="6" name="reason" maxlength="200"
+                        tabindex="2" autocomplete="on" placeholder="请输入" data-bv-container="#err_username"
+                        pattern="^[\u4e00-\u9fa5A-Za-z0-9\uFF01-\uFFEF]{0,200}$"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label for="totalPrice" class="col-sm-3 col-form-label text-sm-end">退货总金额</label>
+          <div class="col-sm-9">
+            <div class="input-group">
+              <span class="input-group-text bg-white"><i class="bi bi-currency-yen"></i></span>
+              <input type="text" class="form-control" id="totalPrice" name="totalPrice" maxlength="20" tabindex="2"
+                     aria-label="name" autocomplete="on" placeholder="请输入" data-bv-container="#err_username">
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label for="cus" class="col-sm-3 col-form-label text-sm-end">顾客备注</label>
+          <div class="col-sm-9">
+            <div class="input-group">
+              <span class="input-group-text bg-white"><i class="bi bi-currency-yen"></i></span>
+              <input type="text" class="form-control" id="cus" name="cus" maxlength="20" tabindex="2"
+                     aria-label="name" autocomplete="on" placeholder="请输入" data-bv-container="#err_username">
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label for="unit" class="col-sm-3 col-form-label text-sm-end">计件方式</label>
+          <div class="col-sm-9">
+            <div class="input-group">
+              <span class="input-group-text bg-white"><i class="bi bi-tags-fill"></i></span>
+              <select class="form-select" id="unit" name="unit" tabindex="6">
+                <option value="">请选择</option>
+                <option value="瓶">瓶</option>
+                <option value="袋">袋</option>
+                <option value="千克">千克</option>
+                <option value="盒">盒</option>
+                <option value="箱">箱</option>
+                <option value="件">件</option>
+                <option value="支">支</option>
+                <option value="套">套</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row mb-3">
+          <div class="col-sm-9 offset-sm-3 text-center">
+            <button type="submit" class="btn btn-primary">确认修改</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+</div>
+<!--回到顶部开始-->
+<a href="javaScript:" class="bsa-back-to-top"><i class='bi bi-arrow-up-short'></i></a>
+<!--回到顶部结束-->
+
+
+<script src="../lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../lib/jquery/dist/jquery.min.js"></script>
+<script src="../lib/formvalidation/js/formValidation.js"></script>
+<script src="../lib/formvalidation/js/framework/bootstrap.js"></script>
+<script src="../lib/formvalidation/js/language/zh_CN.js"></script>
+<script src="../dist/js/bootstrap-admin.min.js"></script>
+<script src="../dist/js/app.js"></script>
+<script src="../dist/js/rockjs-1.0.js"></script>
+<script src="../pagejs/common.js"></script>
+<script>
+
+
+  var mvc = rock.initSvr(["product"]);
+  var productService = mvc.findService("product");
+  rock.initBasicMethod([productService]);
+
+  function loadProduct() {
+    var $search = $("#productId");
+    var defaultOption = $search.find('option:first'); // 保存 "请选择分类" 选项
+
+    $search.empty(); // 清空除了 "请选择分类" 选项之外的其他选项
+    $search.append(defaultOption); // 重新添加 "请选择分类" 选项
+
+    productService.queryAll({sort: "id"}, function (rtn, status) {
+      if (rtn.hasError) {
+        alert(rock.errorText(rtn, "查询列表失败!"));
+      } else if (rtn.notEmpty) {
+        var list = rtn.result, option = '<option value="%s">[%s] － %s</option>';
+        var $search = $("#productId");
+        $.each(list, function (i, vo) {
+          $search.append(rock.format(option, [vo.id, vo.id, vo.name]));
+          // 从 sessionStorage 中获取数据并解析为对象
+          var selectedUserData = JSON.parse(sessionStorage.getItem('selectedUserData'));
+          if (vo.id == selectedUserData.productId) {
+            $search.children(":last-child").prop("selected", true);
+          }
+          // $edit.append(rock.format(option, [vo.id, vo.code, vo.name]));
+        });
+      } else {
+        alert("未查询到部门列表!");
+      }
+    });
+  }
+
+
+  //   var mvc = rock.initSvr(["category"]);
+  //   var categoryService = mvc.findService("category");
+  //   rock.initBasicMethod([categoryService]);
+
+  //   function loadCategory() {
+  //     var $search = $("#categoryId");
+  //     var defaultOption = $search.find('option:first'); // 保存 "请选择分类" 选项
+
+  //     $search.empty(); // 清空除了 "请选择分类" 选项之外的其他选项
+  //     $search.append(defaultOption); // 重新添加 "请选择分类" 选项
+
+  //     categoryService.queryAll({sort: "id"}, function (rtn, status) {
+  //       if (rtn.hasError) {
+  //         alert(rock.errorText(rtn, "查询列表失败!"));
+  //       } else if (rtn.notEmpty) {
+  //         var list = rtn.result, option = '<option value="%s">[%s] － %s</option>';
+  //         var $search = $("#categoryId");
+  //         $.each(list, function (i, vo) {
+  //           $search.append(rock.format(option, [vo.id, vo.id, vo.name]));
+  //            // 从 sessionStorage 中获取数据并解析为对象
+  //            var selectedUserData = JSON.parse(sessionStorage.getItem('selectedUserData'));
+  //            console.log(selectedUserData)
+  //            if (vo.id == selectedUserData.categoryId) {
+  //             $search.children(":last-child").prop("selected", true);
+  //           }
+  //         });
+  //       } else {
+  //         alert("未查询到部门列表!");
+  //       }
+  //     });
+  //   }
+
+
+  $(function ($) {
+
+
+    $("#hide_id").hide();
+    loadProduct();
+// loadCategory();
+
+    // 从 sessionStorage 中获取数据并解析为对象
+    var selectedUserData = JSON.parse(sessionStorage.getItem('selectedUserData'));
+
+    $("#quantity").val(selectedUserData.quantity);
+    $("#reason").val(selectedUserData.reason);
+    $("#cus").val(selectedUserData.cus);
+    $("#totalPrice").val(selectedUserData.totalPrice);
+    $("#id").attr("value", selectedUserData.id);
+    $("#unit").val(selectedUserData.unitName);
+
+    $("#form").formValidation({
+      //验证字段
+
+      fields: {
+        productId: {
+          validators: {
+            notEmpty: {
+              message: '请选择'
+            }
+
+          }
+        },
+
+        totalPrice: {
+          validators: {
+            notEmpty: {
+              message: '单价不能为空'
+            },
+            regexp: {
+              regexp: /^\d+(\.\d{0,2})?$/,
+              message: '请输入最多两位小数的数字'
+            }
+
+          }
+        },
+
+        quantity: {
+          validators: {
+            notEmpty: {
+              message: '不能为空'
+            },
+            greaterThan: {
+              value: 1,
+              inclusive: true,
+              message: '数量最小为1'
+            }
+          }
+        },
+
+
+        //...
+      }
+    }).on('success.form.fv', function (e) {
+
+      //阻止表单提交
+      e.preventDefault();
+
+      // 获取表单字段的值
+      var id = document.getElementById('id').value;
+      var productId = document.getElementById('productId').value;
+      //var categoryId = document.getElementById('categoryId').value;
+      var quantity = document.getElementById('quantity').value;
+      var reason = document.getElementById('reason').value;
+      var cus = document.getElementById('cus').value;
+      var unit = document.getElementById('unit').value;
+      var totalPrice = document.getElementById('totalPrice').value;
+
+// 组织成 JSON 格式
+      var data = {
+        "id": id,
+        "productId": productId,
+        "totalPrice": totalPrice,
+        "quantity": quantity,
+        "reason": reason,
+        "cus": cus
+      };
+
+      $.ajax({
+        url: 'http://127.0.0.1:8081/voucher/product/update',
+        method: 'POST',
+        //跨域
+        xhrFields: {
+          withCredentials: true
+        },
+        contentType: 'application/json',
+        data: JSON.stringify({"unit": unit, "id": productId}),
+      }).then(response => {
+        // 处理第二个 AJAX 请求的响应
+      });
+
+
+// 使用 AJAX 发送数据到后端
+      $.ajax({
+        //跨域
+        xhrFields: {
+          withCredentials: true
+        },
+        url: "http://127.0.0.1:8081/voucher/return/updateReturn",
+        method: 'post',
+        contentType: 'application/json',
+        data: JSON.stringify(data)
+      }).then(response => {
+        if (response.result) {
+          $.toasts({
+            type: 'success',
+            content: '修改信息成功！',
+            delay: 1000,
+            autohide: true,
+            onHidden: function () {
+              parent.modalInstance.setData(true);
+              parent.modalInstance.close();
+            }
+          });
+        } else if (response.hasError) {
+          var errorMessage = rock.errorText(response, "添加失败!");
+          $.toasts({
+            type: 'danger',
+            content: errorMessage,
+            delay: 3050, // 将显示时间设置
+            onShown: function () {
+              if (response.errorCode === "1077") {
+                $("#code").focus();
+              }
+            }
+          });
+        }
+      });
+
+
+    });
+
+
+  });
+
+
+</script>
+
+
+</body>
+
+</html>

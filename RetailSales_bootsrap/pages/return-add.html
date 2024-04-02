@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="zh">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <link rel="icon" href="dist/img/hualogo.gif" sizes="32x32" type="image/gif">
+  <link rel="icon" href="dist/img/hualogo.gif" sizes="16x16" type="image/gif">
+  <meta name="keywords" content="门店单据管理系统">
+  <meta name="description" content="门店单据管理系统">
+  <meta name="author" content="ajiho">
+  <link rel="stylesheet" href="../lib/bootstrap-icons/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../dist/css/bootstrap-admin.min.css">
+  <title>添加退货单</title>
+</head>
+
+<body class="bg-body-tertiary py-3">
+<div class="container-fluid">
+  <div class="card border-0 shadow-sm">
+    <div class="card-body">
+      <form id="form">
+        <form id="form" class="form">
+
+          <!-- <div class="mb-3" id="hide_id">
+<div class="input-group">
+<span class="input-group-text bg-white"><i class="bi bi-person-vcard"></i></span>
+<input type="text" class="form-control" id="merchantId" name="merchantId" readonly maxlength="20"
+  tabindex="2" autocomplete placeholder="" required data-bv-container="#err_username"
+  pattern="^[A-Za-z0-9]{0,20}$">
+</div>
+</div> -->
+
+          <div class="row mb-3">
+            <label for="productId" class="col-sm-3 col-form-label text-sm-end">商品名称</label>
+            <div class="col-sm-9">
+              <div class="input-group">
+                <span class="input-group-text bg-white"><i class="bi bi-tags-fill"></i></span>
+                <select class="form-select" id="productId" name="productId" tabindex="6">
+                  <option value="">请选择商品</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="row mb-3">
+            <label for="quantity" class="col-sm-3 col-form-label text-sm-end">退货数量</label>
+            <div class="col-sm-9">
+              <div class="input-group">
+                <span class="input-group-text bg-white"><i class="bi bi-basket"></i></span>
+                <input type="number" class="form-control" id="quantity" name="quantity" maxlength="20" tabindex="2"
+                       aria-label="name" autocomplete="on" placeholder="请输入商品退货数量"
+                       data-bv-container="#err_username"
+                       pattern="^\d{0,20}$">
+              </div>
+            </div>
+          </div>
+
+
+          <div class="row mb-3">
+            <label for="totalPrice" class="col-sm-3 col-form-label text-sm-end">退货总金额</label>
+            <div class="col-sm-9">
+              <div class="input-group">
+                <span class="input-group-text bg-white"><i class="bi bi-currency-yen"></i></span>
+                <input type="text" class="form-control" id="totalPrice" name="totalPrice" maxlength="20" tabindex="2"
+                       aria-label="name" autocomplete="on" placeholder="请输入" data-bv-container="#err_username">
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <label for="cus" class="col-sm-3 col-form-label text-sm-end">顾客备注</label>
+            <div class="col-sm-9">
+              <div class="input-group">
+                <span class="input-group-text bg-white"><i class="bi bi-currency-yen"></i></span>
+                <input type="text" class="form-control" id="cus" name="cus" maxlength="20" tabindex="2"
+                       aria-label="name" autocomplete="on" placeholder="请输入" data-bv-container="#err_username">
+              </div>
+            </div>
+          </div>
+
+
+          <div class="row mb-3">
+            <label for="reason" class="col-sm-3 col-form-label text-sm-end">退货原因</label>
+            <div class="col-sm-9">
+              <div class="input-group">
+                <span class="input-group-text bg-white"><i class="bi bi-window-dock"></i></span>
+                <textarea class="form-control" id="reason" rows="6" name="reason" maxlength="200"
+                          tabindex="2" autocomplete="on" placeholder="请输入" data-bv-container="#err_username"
+                          pattern="^[\u4e00-\u9fa5A-Za-z0-9\uFF01-\uFFEF]{0,200}$"></textarea>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="row mb-3">
+            <label for="emp" class="col-sm-3 col-form-label text-sm-end">操作人</label>
+            <div class="col-sm-9">
+              <div class="input-group">
+                <span class="input-group-text bg-white"><i class="bi bi-bag-plus-fill"></i></span>
+                <input type="text" class="form-control" id="emp" name="emp" maxlength="20" tabindex="2"
+                       aria-label="emp" autocomplete placeholder="请输入员工编号" data-bv-container="#err_username"
+                       pattern="^[\u4e00-\u9fa5A-Za-z0-9\uFF01-\uFFEF]{0,20}$">
+              </div>
+            </div>
+          </div>
+
+
+          <div class="mb-3 text-center">
+            <button type="submit" class="btn btn-primary">添加销售单</button>
+          </div>
+          <br>
+
+        </form>
+    </div>
+  </div>
+
+
+</div>
+<!--回到顶部开始-->
+<a href="javaScript:" class="bsa-back-to-top"><i class='bi bi-arrow-up-short'></i></a>
+<!--回到顶部结束-->
+<script src="../lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../lib/jquery/dist/jquery.min.js"></script>
+<script src="../lib/formvalidation/js/formValidation.js"></script>
+<script src="../lib/formvalidation/js/framework/bootstrap.js"></script>
+<script src="../lib/formvalidation/js/language/zh_CN.js"></script>
+<script src="../dist/js/bootstrap-admin.min.js"></script>
+<script src="../dist/js/app.js"></script>
+<script src="../dist/js/rockjs-1.0.js"></script>
+<script src="../pagejs/common.js"></script>
+<script>
+  // const priceInput = document.getElementById('price');
+  // priceInput.addEventListener('input', function () {
+  //   const inputValue = parseFloat(priceInput.value);
+  //   const formattedValue = inputValue.toFixed(2);
+  //   priceInput.value = formattedValue;
+  // })
+
+  const priceInput = document.getElementById('totalPrice');
+  priceInput.addEventListener('blur', function () {
+    const value = this.value.trim();
+    if (value !== '') {
+      const floatValue = parseFloat(value);
+      if (!isNaN(floatValue)) {
+        const formattedValue = floatValue.toFixed(2);
+        this.value = formattedValue;
+      }
+    }
+  });
+  // $("#hide_id").hide();
+
+
+  var mvc = rock.initSvr(["product"]);
+  var productService = mvc.findService("product");
+  rock.initBasicMethod([productService]);
+
+  function loadProduct() {
+    var $search = $("#productId");
+    var defaultOption = $search.find('option:first'); // 保存 "请选择分类" 选项
+
+    $search.empty(); // 清空除了 "请选择分类" 选项之外的其他选项
+    $search.append(defaultOption); // 重新添加 "请选择分类" 选项
+
+    productService.queryAll({sort: "id"}, function (rtn, status) {
+      if (rtn.hasError) {
+        alert(rock.errorText(rtn, "查询列表失败!"));
+      } else if (rtn.notEmpty) {
+        var list = rtn.result, option = '<option value="%s">%s － %s</option>';
+        var $search = $("#productId");
+        $.each(list, function (i, vo) {
+          $search.append(rock.format(option, [vo.id, vo.name, vo.categoryName]));
+          // $edit.append(rock.format(option, [vo.id, vo.code, vo.name]));
+        });
+      } else {
+        alert("未查询到部门列表!");
+      }
+    });
+  }
+
+
+  $(function ($) {
+    // loadCategory();
+    loadProduct();
+
+
+    $("#form").formValidation({
+      //验证字段
+
+      fields: {
+
+
+        quantity: {
+          validators: {
+            notEmpty: {
+              message: '数量不能为空'
+            },
+            greaterThan: {
+              value: 1,
+              inclusive: true,
+              message: '数量最小为1'
+            }
+          }
+        },
+
+        reason: {
+          validators: {
+
+            stringLength: {
+              min: 0,
+              max: 200,
+              message: '不要超过200字'
+            }
+          }
+        },
+        productId: {
+          validators: {
+            notEmpty: {
+              message: '请选择商品信息'
+            }
+          }
+        },
+        totalPrice: {
+          validators: {
+            notEmpty: {
+              message: '单价不能为空'
+            },
+            regexp: {
+              regexp: /^\d+(\.\d{0,2})?$/,
+              message: '请输入最多两位小数的数字'
+            }
+
+          }
+        },
+        emp: {
+          validators: {
+            notEmpty: {
+              message: '请输入操作人代号'
+            }
+          }
+        },
+
+      }
+    }).on('success.form.fv', function (e) {
+
+      //阻止表单提交
+      e.preventDefault();
+
+      // 得到表单对象
+      let $form = $(e.target);
+
+// 构建包含表单数据的对象
+      let formData = {};
+      $form.serializeArray().forEach(item => {
+        formData[item.name] = item.value;
+      });
+
+// 将对象转换为 JSON 字符串
+      let jsonData = JSON.stringify(formData);
+      //得到序列化数据
+      $.ajax({
+        url: "http://127.0.0.1:8081/voucher/return/addReturn",
+        method: 'post',
+        contentType: 'application/json',
+        data: jsonData,
+      }).then(response => {
+
+        if (response.result) {
+          $.toasts({
+            type: 'success',
+            content: '添加成功！',
+            delay: 1500,
+            autohide: true,
+            onHidden: function () {
+              parent.modalInstance.setData(true);
+              parent.modalInstance.close();
+            }
+          });
+        } else if (response.hasError) {
+          var errorMessage = rock.errorText(response, "添加失败!");
+          $.toasts({
+            type: 'danger',
+            content: errorMessage,
+            delay: 3050, // 将显示时间设置
+            onShown: function () {
+              if (response.errorCode === "1077") {
+                $("#code").focus();
+              }
+            }
+          });
+
+        }
+
+
+      });
+
+    });
+
+    //  }
+    // });
+  });
+
+</script>
+
+</body>
+
+</html>

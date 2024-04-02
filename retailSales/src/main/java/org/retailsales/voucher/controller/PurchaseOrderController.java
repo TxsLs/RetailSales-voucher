@@ -34,7 +34,7 @@ public class PurchaseOrderController extends BaseController<PurchaseOrder, Purch
             @Parameter(description = "categoryid") @RequestParam(required = false) String categoryId,
             @Parameter(description = "supplierId") @RequestParam(required = false) String supplierId,
             @Parameter(description = "categoryName") @RequestParam(required = false) String categoryName,
-            @Parameter(description = "排序规则字符串") @RequestParam(required = false) String stockQuantity,
+            @Parameter(description = "排序规则字符串") @RequestParam(required = false) String quantity,
             @Parameter(description = "起始时间") @RequestParam(required = false) String joinTime,
             @Parameter(description = "结束时间") @RequestParam(required = false) String endTime,
             @Parameter(description = "页码", required = true) @RequestParam long pageNum,
@@ -44,9 +44,9 @@ public class PurchaseOrderController extends BaseController<PurchaseOrder, Purch
         if (StringUtils.isNotEmpty(productName))
             where.like("productName", productName);
         if (StringUtils.isNotEmpty(price))
-            where.like("price", price);
-        if (StringUtils.isNotEmpty(stockQuantity))
-            where.like("stockQuantity", stockQuantity);
+            where.equal("price", price);
+        if (StringUtils.isNotEmpty(quantity))
+            where.equal("quantity", quantity);
         if (StringUtils.isNotEmpty(categoryId))
             where.like("categoryId", categoryId);
         if (StringUtils.isNotEmpty(supplierId))

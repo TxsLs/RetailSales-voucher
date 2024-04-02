@@ -74,10 +74,10 @@ rock:
     key-field-name: f_seqname
     value-field-name: f_seqvalue
 
-#encoder:
-#  crypt:
-#    enable: false
-#    use-captcha: false
+encoder:
+  crypt:
+    enable: false
+    use-captcha: false
 
 logging:
   config: classpath:logback.xml

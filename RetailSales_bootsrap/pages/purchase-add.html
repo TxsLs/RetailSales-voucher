@@ -186,34 +186,6 @@
   // $("#hide_id").hide();
 
 
-  var mvc = rock.initSvr(["category"]);
-  var categoryService = mvc.findService("category");
-  rock.initBasicMethod([categoryService]);
-
-  function loadCategory() {
-    var $search = $("#categoryId");
-    var defaultOption = $search.find('option:first'); // 保存 "请选择分类" 选项
-
-    $search.empty(); // 清空除了 "请选择分类" 选项之外的其他选项
-    $search.append(defaultOption); // 重新添加 "请选择分类" 选项
-
-    categoryService.queryAll({sort: "id"}, function (rtn, status) {
-      if (rtn.hasError) {
-        alert(rock.errorText(rtn, "查询列表失败!"));
-      } else if (rtn.notEmpty) {
-        var list = rtn.result, option = '<option value="%s">[%s] － %s</option>';
-        var $search = $("#categoryId");
-        $.each(list, function (i, vo) {
-          $search.append(rock.format(option, [vo.id, vo.id, vo.name]));
-          // $edit.append(rock.format(option, [vo.id, vo.code, vo.name]));
-        });
-      } else {
-        alert("未查询到部门列表!");
-      }
-    });
-  }
-
-
   var mvc = rock.initSvr(["product"]);
   var productService = mvc.findService("product");
   rock.initBasicMethod([productService]);
@@ -455,13 +427,7 @@
           }
         },
 
-        categoryId: {
-          validators: {
-            notEmpty: {
-              message: '请选择分类'
-            }
-          }
-        },
+
         supplierId: {
           validators: {
             notEmpty: {
