@@ -33,7 +33,7 @@ spring:
     username: root
     password: 12345666
     driver-class-name: com.mysql.cj.jdbc.Driver
-    ## ??Hikar???
+    ## 使用Hikar数据源
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       pool-name: hikari-boot

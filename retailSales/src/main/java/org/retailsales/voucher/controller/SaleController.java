@@ -2,7 +2,6 @@ package org.retailsales.voucher.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -12,11 +11,8 @@ import org.quincy.rock.core.dao.sql.Sort;
 import org.quincy.rock.core.vo.PageSet;
 import org.quincy.rock.core.vo.Result;
 import org.retailsales.voucher.BaseController;
-import org.retailsales.voucher.entity.OutboundOrder;
 import org.retailsales.voucher.entity.Product;
-import org.retailsales.voucher.entity.PurchaseOrder;
 import org.retailsales.voucher.entity.SalesOrder;
-import org.retailsales.voucher.service.InboundService;
 import org.retailsales.voucher.service.OutboundService;
 import org.retailsales.voucher.service.ProductService;
 import org.retailsales.voucher.service.SaleService;
@@ -103,7 +99,11 @@ public class SaleController extends BaseController<SalesOrder, SaleService> {
     @PostMapping("/updateSale")
     public @ResponseBody Result<Boolean> updateInbound(@RequestBody SalesOrder vo) {
         log.debug("call updateInbound!");
+        boolean re = outboundService.existByName("productId", vo.getProductId(), null);
 
+        if (re == false) {
+            return Result.toResult("1077", "此商品没有出库");
+        }
         Product product = productservice.findByName("id", vo.getProductId());
         boolean result;
         if (product.getOnsaleQuantity() >= 0) {

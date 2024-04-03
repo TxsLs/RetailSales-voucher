@@ -1,17 +1,17 @@
 package org.retailsales.voucher.service.Impl;
 
-import java.util.Date;
-
-
 import org.quincy.rock.core.util.DateUtil;
+import org.retailsales.voucher.BaseService;
 import org.retailsales.voucher.dao.EmployeeDao;
 import org.retailsales.voucher.entity.Employee;
-import org.retailsales.voucher.BaseService;
+import org.retailsales.voucher.entity.Photo;
 import org.retailsales.voucher.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
 
 @Service
 public class EmployeeServiceImpl extends BaseService<Employee, EmployeeDao> implements EmployeeService {
@@ -23,6 +23,12 @@ public class EmployeeServiceImpl extends BaseService<Employee, EmployeeDao> impl
 	public Employee findByCode(String code) {
 		return this.dao().findByName("code", code);
 	}
+
+    /*@Override
+    @Transactional
+    public boolean updateSelfInfo(Employee vo) {
+        return dao().updateSelfInfo(vo) > 0;
+    }*/
 
 	@Override
 	@Transactional
@@ -53,7 +59,16 @@ public class EmployeeServiceImpl extends BaseService<Employee, EmployeeDao> impl
 		}
 	}
 
+	@Override
+	public Photo getPhoto(long id) {
+		return this.dao().getPhoto(id);
+	}
 
+	@Override
+	@Transactional
+	public boolean updatePhoto(Photo photo) {
+		return dao().updatePhoto(photo) > 0;
+	}
     /*@Override
     @Transactional
     public boolean updateSelfInfo(Employee vo) {

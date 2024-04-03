@@ -1,8 +1,7 @@
 package org.retailsales.voucher.config;
 
-import java.security.SecureRandom;
-
-
+import lombok.Getter;
+import lombok.Setter;
 import org.quincy.rock.core.security.SecurityUtils;
 import org.quincy.rock.core.util.StringUtil;
 import org.retailsales.voucher.AppUtils;
@@ -14,8 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder.BCryptVe
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import lombok.Getter;
-import lombok.Setter;
+import java.security.SecureRandom;
 
 /**
  * <b>密码加密配置。</b>
@@ -36,7 +34,7 @@ public class PasswordConfig {
 	/**
 	 * SECURE_KEY。
 	 */
-	public static final String SECURE_KEY_STRING = SecurityUtils.correctKey("org.boot.hf.admin.user");
+	public static final String SECURE_KEY_STRING = SecurityUtils.correctKey("org.retailSales.voucher.admin.user");
 	/**
 	 * SECURE_KEY。
 	 */

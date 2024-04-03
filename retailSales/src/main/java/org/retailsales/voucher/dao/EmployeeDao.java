@@ -1,11 +1,11 @@
 package org.retailsales.voucher.dao;
 
 import org.apache.ibatis.annotations.Mapper;
-
 import org.quincy.rock.core.dao.DaoUtil;
 import org.quincy.rock.core.util.MapUtil;
 import org.retailsales.voucher.Dao;
 import org.retailsales.voucher.entity.Employee;
+import org.retailsales.voucher.entity.Photo;
 
 
 @Mapper
@@ -36,5 +36,26 @@ public interface EmployeeDao extends Dao<Employee> {
 		return updateMap(MapUtil.asMap("password", newPassword), DaoUtil.and().equal("code", code));
 	}
 
+	/**
+	 * <b>获得照片。</b>
+	 * <p><b>详细说明：</b></p>
+	 * <!-- 在此添加详细说明 -->
+	 * 返回的照片数据存放在二进制数组里。
+	 *
+	 * @param id 主键id
+	 * @return Photo
+	 */
+	public Photo getPhoto(long id);
+
+	/**
+	 * <b>更新照片。</b>
+	 * <p><b>详细说明：</b></p>
+	 * <!-- 在此添加详细说明 -->
+	 * 无。
+	 *
+	 * @param photo 照片实体对象
+	 * @return 更新数据条数
+	 */
+	public int updatePhoto(Photo photo);
 
 }

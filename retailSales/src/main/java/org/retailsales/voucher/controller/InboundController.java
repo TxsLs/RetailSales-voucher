@@ -2,7 +2,6 @@ package org.retailsales.voucher.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -13,7 +12,6 @@ import org.quincy.rock.core.vo.PageSet;
 import org.quincy.rock.core.vo.Result;
 import org.retailsales.voucher.BaseController;
 import org.retailsales.voucher.entity.InboundOrder;
-import org.retailsales.voucher.entity.Product;
 import org.retailsales.voucher.entity.PurchaseOrder;
 import org.retailsales.voucher.service.InboundService;
 import org.retailsales.voucher.service.PurchaseOrderService;
@@ -73,7 +71,11 @@ public class InboundController extends BaseController<InboundOrder, InboundServi
     @PostMapping("/addInbound")
     public @ResponseBody Result<Boolean> addInbound(@RequestBody InboundOrder vo) {
         log.debug("call addInbound!");
+        boolean re = Purchaseservice.existByName("productId", vo.getProductId(), null);
 
+        if (re == false) {
+            return Result.toResult("1077", "此商品没有进货");
+        }
         List<PurchaseOrder> purchase = Purchaseservice.findAllByName("productId", vo.getProductId(), null);
         // 初始化总数量为0
         int totalQuantity = 0;
@@ -96,7 +98,11 @@ public class InboundController extends BaseController<InboundOrder, InboundServi
     @PostMapping("/updateInbound")
     public @ResponseBody Result<Boolean> updateInbound(@RequestBody InboundOrder vo) {
         log.debug("call updateInbound!");
+        boolean re = Purchaseservice.existByName("productId", vo.getProductId(), null);
 
+        if (re == false) {
+            return Result.toResult("1077", "此商品没有进货");
+        }
         List<PurchaseOrder> purchase = Purchaseservice.findAllByName("productId", vo.getProductId(), null);
         // 初始化总数量为0
         int totalQuantity = 0;

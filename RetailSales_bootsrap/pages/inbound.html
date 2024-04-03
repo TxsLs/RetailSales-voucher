@@ -687,17 +687,19 @@
     })
 
 // 导出按钮点击事件
-    $('.excel').on('click', function () {
-      // 获取所有选中行的数据
-      let selectedRows = $("#table").bootstrapTable('getSelections');
+$('.excel').off('click').on('click', function () {
+  // 禁用按钮
+  $(this).prop('disabled', true);
+  // 获取所有选中行的数据
+  let selectedRows = $("#table").bootstrapTable('getSelections');
 
-      // 如果没有选中行，则不执行导出操作
-      if (selectedRows.length === 0) {
-        alert("请先选择要导出的行！");
-        return;
-      }
+  // 如果没有选中行，则不执行导出操作
+  if (selectedRows.length === 0) {
+    alert("请先选择要导出的行！");
+    return;
+  }
 
-      // 获取选中行中的时间数据
+  // 获取选中行中的时间数据
       let dates = selectedRows.map(row => new Date(row.inboundDate));
 
       // 确定时间段
@@ -759,12 +761,14 @@
         }
       }
 
-      // 将工作表添加到工作簿
-      XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+  // 将工作表添加到工作簿
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
 
-      // 导出 Excel 表格
-      XLSX.writeFile(workbook, `${fileName}.xlsx`);
-    });
+  // 导出 Excel 表格
+  XLSX.writeFile(workbook, `${fileName}.xlsx`);
+  // 导出完成后，重新启用按钮
+  $(this).prop('disabled', false);
+});
 
 
     function ignoreClickToSelectOn(e) {

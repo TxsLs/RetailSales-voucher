@@ -9,36 +9,21 @@
 		<id property="id" column="id" javaType="long"/>
 	</resultMap>
 
-	<!--	<select id="getPhoto" resultType="Photo">-->
-	<!--		select f_id id, f_photo-->
-	<!--		photo,f_photo_file photoFile-->
-	<!--		from t_employee-->
-	<!--		where f_id=#{id}-->
-	<!--	</select>-->
+	<select id="getPhoto" resultType="Photo">
+		select f_id         id,
+			   f_photo
+							photo,
+			   f_photo_file photoFile
+		from t_employee
+		where f_id = #{id}
+	</select>
 
-	<!--	<update id="updatePhoto" parameterType="Photo">-->
-	<!--		update t_employee set-->
-	<!--		f_photo=#{photo},f_photo_file=#{photoFile}-->
-	<!--		where f_id=#{id}-->
-	<!--	</update>-->
+	<update id="updatePhoto" parameterType="Photo">
+		update t_employee
+		set f_photo=#{photo},
+			f_photo_file=#{photoFile}
+		where f_id = #{id}
+	</update>
 
-	<!-- 	<update id="updateSelfInfo" parameterType="Employee">
-            update t_employee
-            <set>
-                <if test="code!=null">
-                    f_code=#{code},
-                </if>
-                <if test="name!=null">
-                    f_name=#{name},
-                </if>
-                <if test="gender!=null">
-                    f_gender=#{gender},
-                </if>
-                <if test="phone!=null">
-                    f_phone=#{phone},
-                </if>
-            </set>
-            where f_id=#{id}
-        </update> -->
 
 </mapper>

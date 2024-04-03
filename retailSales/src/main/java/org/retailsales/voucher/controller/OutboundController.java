@@ -11,19 +11,14 @@ import org.quincy.rock.core.dao.sql.Sort;
 import org.quincy.rock.core.vo.PageSet;
 import org.quincy.rock.core.vo.Result;
 import org.retailsales.voucher.BaseController;
-import org.retailsales.voucher.entity.InboundOrder;
 import org.retailsales.voucher.entity.OutboundOrder;
 import org.retailsales.voucher.entity.Product;
-import org.retailsales.voucher.entity.PurchaseOrder;
 import org.retailsales.voucher.service.InboundService;
 import org.retailsales.voucher.service.OutboundService;
 import org.retailsales.voucher.service.ProductService;
-import org.retailsales.voucher.service.PurchaseOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @Tag(name = "出库单管理")
@@ -97,7 +92,11 @@ public class OutboundController extends BaseController<OutboundOrder, OutboundSe
     @PostMapping("/updateOutbound")
     public @ResponseBody Result<Boolean> updateInbound(@RequestBody OutboundOrder vo) {
         log.debug("call updateInbound!");
+        boolean re = inboundService.existByName("productId", vo.getProductId(), null);
 
+        if (re == false) {
+            return Result.toResult("1077", "此商品没有入库");
+        }
         Product product = productservice.findByName("id", vo.getProductId());
         boolean result;
         if (product.getStockQuantity() >= 0) {

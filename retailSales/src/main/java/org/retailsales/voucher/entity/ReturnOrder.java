@@ -62,10 +62,10 @@ public class ReturnOrder extends Entity {
     @Column(value = "f_name", tableAlias = "s", ignoreInsert = true, ignoreUpdate = true)
     private String supplierName;*/
 
-    @Schema(description = "操作人", required = true, example = "3")
+    @Schema(description = "操作人", required = false, example = "3")
     private String emp;
 
-    @Schema(description = "顾客代号", required = true, example = "3")
+    @Schema(description = "顾客代号", required = false, example = "3")
     private String cus;
 
 }

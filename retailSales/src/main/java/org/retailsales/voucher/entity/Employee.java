@@ -1,17 +1,13 @@
 package org.retailsales.voucher.entity;
 
-import java.util.Date;
-
-
-import org.quincy.rock.core.dao.annotation.Column;
-import org.quincy.rock.core.dao.annotation.IgnoreUpdate;
-import org.quincy.rock.core.dao.annotation.JoinTable;
-import org.quincy.rock.core.dao.annotation.JoinTables;
-import org.quincy.rock.core.dao.annotation.Table;
-
 import lombok.Getter;
 import lombok.Setter;
+import org.quincy.rock.core.dao.annotation.Column;
+import org.quincy.rock.core.dao.annotation.IgnoreUpdate;
+import org.quincy.rock.core.dao.annotation.Table;
 import org.retailsales.voucher.Entity;
+
+import java.util.Date;
 
 @Getter
 @Setter
@@ -45,5 +41,8 @@ public class Employee extends Entity {
 
 	private Integer status;
 
+
+	@Column(value = "f_photo_file is not null", calculated = true)
+	private Boolean hasPhoto;
 
 }

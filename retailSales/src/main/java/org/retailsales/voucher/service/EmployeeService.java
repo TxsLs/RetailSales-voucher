@@ -3,6 +3,7 @@ package org.retailsales.voucher.service;
 
 import org.retailsales.voucher.Service;
 import org.retailsales.voucher.entity.Employee;
+import org.retailsales.voucher.entity.Photo;
 
 public interface EmployeeService extends Service<Employee> {
 
@@ -29,6 +30,29 @@ public interface EmployeeService extends Service<Employee> {
 	 * @return 是否成功
 	 */
 	public boolean changeSelfPassword(String code, String oldPassword, String newPassword);
+
+	/**
+	 * <b>获得照片。</b>
+	 * <p><b>详细说明：</b></p>
+	 * <!-- 在此添加详细说明 -->
+	 * 返回的照片数据存放在二进制数组里。
+	 *
+	 * @param id 主键id
+	 * @return Photo
+	 */
+	public Photo getPhoto(long id);
+
+	/**
+	 * <b>更新照片。</b>
+	 * <p><b>详细说明：</b></p>
+	 * <!-- 在此添加详细说明 -->
+	 * 无。
+	 *
+	 * @param photo 照片实体对象
+	 * @return 是否成功
+	 */
+	public boolean updatePhoto(Photo photo);
+
 
 	/**
 	 * <b>系统管理员修改密码。</b>
