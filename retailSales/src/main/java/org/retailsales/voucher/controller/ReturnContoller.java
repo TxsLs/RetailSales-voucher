@@ -2,7 +2,6 @@ package org.retailsales.voucher.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -12,7 +11,8 @@ import org.quincy.rock.core.dao.sql.Sort;
 import org.quincy.rock.core.vo.PageSet;
 import org.quincy.rock.core.vo.Result;
 import org.retailsales.voucher.BaseController;
-import org.retailsales.voucher.entity.*;
+import org.retailsales.voucher.entity.ReturnOrder;
+import org.retailsales.voucher.entity.SalesOrder;
 import org.retailsales.voucher.service.ProductService;
 import org.retailsales.voucher.service.ReturnService;
 import org.retailsales.voucher.service.SaleService;
@@ -64,14 +64,6 @@ public class ReturnContoller extends BaseController<ReturnOrder, ReturnService> 
             where.between("saleDate", joinTime, endTime); // created_time为时间字段名
         }
 
-       /* if (StringUtils.isNotEmpty(status))
-            where.like("status", status);
-        if (StringUtils.isNotEmpty(empStatus))
-            where.like("empStatus", empStatus);
-        if (merchantId != null)
-            where.equal(DataType.LONG, "merchantId", merchantId.toString());*/
-        //	if (workstateId != null)
-        //		where.equal(DataType.LONG, "workstateId", workstateId.toString());
         PageSet<ReturnOrder> ps = this.service().findPage(where, Sort.parse(sort), pageNum, pageSize);
         return Result.toResult(ps);
     }

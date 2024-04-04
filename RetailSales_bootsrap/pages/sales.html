@@ -198,20 +198,20 @@
 
 
   function loadTableData() {
-    //_root.loginUser(null, function (rtn, status) {
-    // if (rtn.hasError) {
-    //   alert(rock.errorText(rtn, "连接到服务器失败！"));
-    // } else if (rtn.notNull && rtn.result.admin == 0) {
+    _root.loginUser(null, function (rtn, status) {
+      if (rtn.hasError) {
+        alert(rock.errorText(rtn, "连接到服务器失败！"));
+      } else if (rtn.notNull && rtn.result.admin == 0) {
 
-    // 销毁第一个表格实例
-    $('#table').bootstrapTable('destroy');
-    $('#table').bootstrapTable({
-      //配置语言
-      locale: 'zh-CN',
-      //设置高度就可以固定表头
-      // height: 500,
-      //请求地址
-      url: 'http://localhost:8081/voucher/sale/queryPage',
+        // 销毁第一个表格实例
+        $('#table').bootstrapTable('destroy');
+        $('#table').bootstrapTable({
+          //配置语言
+          locale: 'zh-CN',
+          //设置高度就可以固定表头
+          // height: 500,
+          //请求地址
+          url: 'http://localhost:8081/voucher/sale/queryPage',
       queryParamsType: "page",
       responseHandler: function (res) {
         var data = {};
@@ -991,20 +991,20 @@ $('.excel').off('click').on('click', function () {
       });
     });
 
-    // //下拉框美化插件，原生的bootstrap它会调用系统的那个下拉菜单
-    // $('select').selectpicker();
+        // //下拉框美化插件，原生的bootstrap它会调用系统的那个下拉菜单
+        // $('select').selectpicker();
 
-    // } else {
-    //   $.toasts({
-    //     type: 'danger',
-    //     content: '未登录！',
-    //     delay: 3000,
-    //     onHidden: function () {
-    //       top.location.replace('login.html');
-    //     }
-    //   })
-    // }
-    //})
+      } else {
+        $.toasts({
+          type: 'danger',
+          content: '未登录！',
+          delay: 3000,
+          onHidden: function () {
+            top.location.replace('login.html');
+          }
+        })
+      }
+    })
 
   }
 

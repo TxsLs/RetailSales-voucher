@@ -23,7 +23,7 @@
         <div class="card-body p-4">
           <div class="d-flex align-items-center justify-content-between">
             <div class="me-1">
-              <h6 class="mb-2 bsa-ellipsis-1 ">进货金额</h6>
+              <h6 class="mb-2 bsa-ellipsis-1 ">进货总金额</h6>
               <h4 class="mb-1 bsa-ellipsis-1" id="money"></h4>
             </div>
             <i class="bi bi-currency-yen fs-1 text-danger"></i>
@@ -36,8 +36,21 @@
         <div class="card-body p-4">
           <div class="d-flex align-items-center justify-content-between">
             <div class="me-1">
-              <h6 class="mb-2 bsa-ellipsis-1 ">销售金额</h6>
+              <h6 class="mb-2 bsa-ellipsis-1 ">销售总金额</h6>
               <h4 class="mb-1 bsa-ellipsis-1" id="money2"></h4>
+            </div>
+            <i class="bi bi-currency-yen fs-1 text-danger"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center justify-content-between">
+            <div class="me-1">
+              <h6 class="mb-2 bsa-ellipsis-1 ">退货金额</h6>
+              <h4 class="mb-1 bsa-ellipsis-1" id="money3"></h4>
             </div>
             <i class="bi bi-currency-yen fs-1 text-danger"></i>
           </div>
@@ -84,19 +97,19 @@
         </div>
       </div>
     </div>
-    <!-- <div class="col-lg-3">
-    <div class="card shadow-sm border-0">
-      <div class="card-body p-4">
-        <div class="d-flex align-items-center justify-content-between">
-          <div class="me-1">
-            <h6 class="mb-2 bsa-ellipsis-1">留言</h6>
-            <h4 class="mb-1 bsa-ellipsis-1" id="message">1000</h4>
+    <div class="col-lg-3">
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center justify-content-between">
+            <div class="me-1">
+              <h6 class="mb-2 bsa-ellipsis-1">退货单总数</h6>
+              <h4 class="mb-1 bsa-ellipsis-1" id="order3">2000</h4>
+            </div>
+            <i class="bi bi-cart fs-1 text-primary"></i>
           </div>
-          <i class="bi bi-chat fs-1 text-success"></i>
         </div>
       </div>
     </div>
-  </div> -->
 
     <!--开源信息-->
     <div class="col-12">
@@ -111,7 +124,7 @@
               <tbody>
               <tr>
                 <th>当前版本</th>
-                <td>v1.0.1</td>
+                <td>门店单据管理系统-V1.0.1</td>
               </tr>
               <tr>
                 <th>基于框架</th>
@@ -137,18 +150,29 @@
       </div>
     </div>
 
-    <!--
+
     <div class="col-lg-6">
       <div class="card border-0 shadow-sm">
         <div class="card-header bg-body">
-          近七天pv值
+          退货单数前三的商品
         </div>
         <div class="card-body">
           <canvas id="chart-bar"></canvas>
         </div>
       </div>
     </div>
+
     <div class="col-lg-6">
+      <div class="card border-0 shadow-sm">
+        <div class="card-header bg-body">
+          进货单数前三的商品
+        </div>
+        <div class="card-body">
+          <canvas id="chart-bar-return"></canvas>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="col-lg-6">
       <div class="card border-0 shadow-sm">
         <div class="card-header bg-body">
           年营业额走势
@@ -506,6 +530,61 @@
             withCredentials: true
           },
           method: 'get',
+          url: 'http://127.0.0.1:8081/voucher/return/queryPage',
+          //表单数据
+          data: {
+            pageNum: 1, pageSize: 10
+          },
+        }).then(response => {
+          if (response.result) {
+            const totalPriceSum = response.result.content.reduce((acc, curr) => acc + curr.totalPrice, 0);
+            // const totalPriceSum = response.result.reduce((sum, obj) => sum + obj.totalPrice, 0);
+            const totalPriceFormatted = totalPriceSum.toFixed(2)
+            const totalorder = response.result.totalCount;
+
+            $('#money3').html(totalPriceFormatted)
+            $('#order3').html(totalorder)
+            //数字老虎机效果
+            new countUp.CountUp(document.querySelector('#money3'), totalPriceFormatted, {
+              //小数点后面的位数
+              decimalPlaces: 2,
+              //持续时间
+              duration: 2
+            }).start();
+
+            new countUp.CountUp(document.querySelector('#order3'), totalorder, {
+              //小数点后面的位数
+              decimalPlaces: 0,
+              //持续时间
+              duration: 2
+            }).start();
+
+
+          } else if (response.hasError) {
+            var errorMessage = rock.errorText(response, "失败!");
+            $.toasts({
+              type: 'danger',
+              content: errorMessage,
+              delay: 3050, // 将显示时间设置
+              onShown: function () {
+                if (response.errorCode === "1069") {
+                  $("#code").focus();
+                }
+              }
+            });
+
+
+          }
+
+        });
+
+
+        //发起ajax请求
+        $.ajax({
+          xhrFields: {
+            withCredentials: true
+          },
+          method: 'get',
           url: 'http://127.0.0.1:8081/voucher/sale/queryPage',
           //表单数据
           data: {
@@ -736,6 +815,144 @@
     //   duration: 2
     // }).start();
 
+    $.ajax({
+      url: 'http://127.0.0.1:8081/voucher/return/queryPage?pageNum=1&pageSize=100',
+      type: 'GET',
+      dataType: 'json',
+      success: function (response) {
+        if (response.result) {
+          const pageSet = response.result; // 获取 PageSet 对象
+          const orders = pageSet.content; // 获取 ReturnOrder 对象数组
+          // 统计每个 productName 出现的次数
+          const productNameCount = {};
+          orders.forEach(order => {
+            if (order.productName in productNameCount) {
+              productNameCount[order.productName]++;
+            } else {
+              productNameCount[order.productName] = 1;
+            }
+          });
+          // 找出出现次数最多的前三个 productName
+          const sortedProductNames = Object.keys(productNameCount).sort((a, b) => productNameCount[b] - productNameCount[a]);
+          const topThreeProductNames = sortedProductNames.slice(0, 3);
+
+          // 更新柱状图的数据
+          const chartData = {
+            labels: [], // 存放前三个 productName
+            datasets: [{
+              label: '退货单数',
+              data: [], // 存放前三个 productName 对应的次数
+              backgroundColor: [
+                'rgba(52,143,80, 0.6)',
+                'rgba(52,143,80, 0.6)',
+                'rgba(52,143,80, 0.6)'
+              ],
+              borderColor: [
+                'rgba(52,143,80, 0.6)',
+                'rgba(52,143,80, 0.6)',
+                'rgba(52,143,80, 0.6)'
+              ],
+              borderWidth: 1
+            }]
+          };
+
+          topThreeProductNames.forEach(productName => {
+            chartData.labels.push(productName);
+            chartData.datasets[0].data.push(productNameCount[productName]);
+          });
+
+          // 更新柱状图
+          const chart = new Chart(document.getElementById('chart-bar').getContext('2d'), {
+            type: 'bar',
+            data: chartData,
+            options: {
+              responsive: true,
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+        } else {
+          // 如果返回的 Result 对象表示失败，则处理错误情况
+          console.error('请求失败:', response.error);
+        }
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.error('请求错误:', textStatus, errorThrown);
+      }
+    });
+
+
+    $.ajax({
+      url: 'http://127.0.0.1:8081/voucher/purchase/queryPage?pageNum=1&pageSize=100',
+      type: 'GET',
+      dataType: 'json',
+      success: function (response) {
+        if (response.result) {
+          const pageSet = response.result; // 获取 PageSet 对象
+          const orders = pageSet.content; // 获取 ReturnOrder 对象数组
+          // 统计每个 productName 出现的次数
+          const productNameCount = {};
+          orders.forEach(order => {
+            if (order.productName in productNameCount) {
+              productNameCount[order.productName]++;
+            } else {
+              productNameCount[order.productName] = 1;
+            }
+          });
+          // 找出出现次数最多的前三个 productName
+          const sortedProductNames = Object.keys(productNameCount).sort((a, b) => productNameCount[b] - productNameCount[a]);
+          const topThreeProductNames = sortedProductNames.slice(0, 3);
+
+          // 更新柱状图的数据
+          const chartData = {
+            labels: [], // 存放前三个 productName
+            datasets: [{
+              label: '进货单数',
+              data: [], // 存放前三个 productName 对应的次数
+              backgroundColor: [
+                'rgba(52,143,80, 0.6)',
+                'rgba(52,143,80, 0.6)',
+                'rgba(52,143,80, 0.6)'
+              ],
+              borderColor: [
+                'rgba(52,143,80, 0.6)',
+                'rgba(52,143,80, 0.6)',
+                'rgba(52,143,80, 0.6)'
+              ],
+              borderWidth: 1
+            }]
+          };
+
+          topThreeProductNames.forEach(productName => {
+            chartData.labels.push(productName);
+            chartData.datasets[0].data.push(productNameCount[productName]);
+          });
+
+          // 更新柱状图
+          const chart = new Chart(document.getElementById('chart-bar-return').getContext('2d'), {
+            type: 'bar',
+            data: chartData,
+            options: {
+              responsive: true,
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+        } else {
+          // 如果返回的 Result 对象表示失败，则处理错误情况
+          console.error('请求失败:', response.error);
+        }
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.error('请求错误:', textStatus, errorThrown);
+      }
+    });
 
     // new Chart(document.getElementById('chart-bar').getContext('2d'), {
     //   type: 'bar',
