@@ -65,7 +65,7 @@ public class PublicController {
 			return Result.toResult("1001", "账号或密码不正确!");
 
 		} else if (user.getStatus() == 0) {
-			return Result.toResult("1066", "您的账户已被封禁，请联系管理员邮箱:1034710773@qq.com!");
+			return Result.toResult("1066", "您的账户已被封禁，请联系管理员邮箱:1597757959@qq.com!");
 		} else if (user.getAdmin() == 0) {
 			User loginUser = new User(//spring安全的uer
 					user.getCode(), user.getPassword(), Arrays.asList());

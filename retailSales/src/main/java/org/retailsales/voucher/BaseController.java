@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.quincy.rock.core.dao.DaoUtil;
 import org.quincy.rock.core.dao.sql.Predicate;
 import org.quincy.rock.core.dao.sql.Sort;
+import org.quincy.rock.core.exception.LoginException;
 import org.quincy.rock.core.util.MapUtil;
 import org.quincy.rock.core.vo.Result;
 import org.quincy.rock.core.vo.Vo.Default;
@@ -50,11 +51,11 @@ public abstract class BaseController<T extends Entity, S extends Service<T>> {
         return this.service;
     }
 
-    // @ModelAttribute
-//	public void checkLogin() throws LoginException {
-//		if (AppUtils.useCaptcha && !AppUtils.isLogin())
-//			throw new LoginException("未登录!");
-//	}
+    @ModelAttribute
+    public void checkLogin() throws LoginException {
+        if (AppUtils.useCaptcha && !AppUtils.isLogin())
+            throw new LoginException("未登录!");
+    }
 
     @Operation(summary = "添加一个实体", description = "该接口继承自BaseController")
     @PostMapping("/add")
