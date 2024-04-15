@@ -807,31 +807,33 @@
 
       // 填充数据并记录需要合并的单元格
       selectedRows.forEach((row, index) => {
+        // 安全检查并转换手机号和用户信息为字符串类型
+        let supplierPhone = row.supplierPhone ? row.supplierPhone.toString() : '';
+        let emp = row.emp ? row.emp.toString() : '';
+        //let quantity = row.quantity ? row.quantity.toString() : '';
+
         let rowData = [
           row.id,
           row.productName,
           row.categoryName,
           {v: `￥${row.price}`, t: 's'}, // 将价格设置为字符串类型，以保留货币符号
+          // {v: quantity, t: 's'},
           row.quantity,
           row.unitName,
           {v: `￥${row.totalPrice}`, t: 's'}, // 将总价设置为字符串类型，以保留货币符号
           row.purchaseDate,
           row.supplierName,
-          row.supplierPhone,
-          row.emp
+          {v: supplierPhone, t: 's'}, // 将手机号转换为字符串类型
+          {v: emp, t: 's'},// 将用户信息转换为字符串类型
         ];
+
         XLSX.utils.sheet_add_aoa(worksheet, [rowData], {origin: -1});
 
-        // 记录合并的单元格信息
-        merges.push({
-          s: {r: index + 2, c: 3}, // 合并的起始单元格位置
-          e: {r: index + 2, c: 4} // 合并的结束单元格位置
-        });
-        merges.push({
-          s: {r: index + 2, c: 6}, // 合并的起始单元格位置
-          e: {r: index + 2, c: 7} // 合并的结束单元格位置
-        });
       });
+
+      // 合并整个表格数据到一个大单元格
+      let mergeRange = XLSX.utils.decode_range(worksheet['!ref']);
+      worksheet['!merges'] = [{s: {r: mergeRange.s.r, c: mergeRange.s.c}, e: {r: mergeRange.e.r, c: mergeRange.e.c}}];
 
       // 设置合并单元格
       worksheet['!merges'] = merges;

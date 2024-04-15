@@ -70,6 +70,10 @@ public class InboundOrder extends Entity {
     @Column(value = "f_name", tableAlias = "s", ignoreInsert = true, ignoreUpdate = true)
     private String supplierName;
 
+    @Schema(description = "供应商名称", required = false, example = "8")
+    @Column(value = "f_phone", tableAlias = "s", ignoreInsert = true, ignoreUpdate = true)
+    private Long supplierPhone;
+
     @Schema(description = "操作人", required = true, example = "3")
     private String emp;
 }
