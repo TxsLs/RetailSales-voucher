@@ -678,18 +678,20 @@ $('.excel').off('click').on('click', function () {
 
       // 填充数据并记录需要合并的单元格
       selectedRows.forEach((row, index) => {
+        let emp = row.emp ? row.emp.toString() : '';
+        let cus = row.cus ? row.cus.toString() : '';
         let rowData = [
           row.id,
           row.productName,
           row.categoryName,
           row.quantity,
           //   row.salePrice,
-          row.totalPrice,
+          {v: `￥${row.totalPrice}`, t: 's'}, // 将总价设置为字符串类型，以保留货币符号
           row.unitName,
           row.reason,
           row.returnDate,
-          row.cus,
-          row.emp
+          {v: cus, t: 's'},
+          {v: emp, t: 's'},// 将用户信息转换为字符串类型
         ];
         XLSX.utils.sheet_add_aoa(worksheet, [rowData], {origin: -1});
       });
