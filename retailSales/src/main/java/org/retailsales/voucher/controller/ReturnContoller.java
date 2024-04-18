@@ -11,6 +11,7 @@ import org.quincy.rock.core.dao.sql.Sort;
 import org.quincy.rock.core.vo.PageSet;
 import org.quincy.rock.core.vo.Result;
 import org.retailsales.voucher.BaseController;
+import org.retailsales.voucher.entity.InboundOrder;
 import org.retailsales.voucher.entity.ReturnOrder;
 import org.retailsales.voucher.entity.SalesOrder;
 import org.retailsales.voucher.service.ProductService;
@@ -84,8 +85,17 @@ public class ReturnContoller extends BaseController<ReturnOrder, ReturnService> 
         for (SalesOrder order : salesOrders) {
             totalQuantity += order.getQuantity();
         }
+
+        List<ReturnOrder> inboundOrders = this.service().findAllByName("productId", vo.getProductId(), null);
+        // 初始化总数量为0
+        int totalQuantityin = 0;
+// 遍历 purchase 列表并累加数量
+        for (ReturnOrder order : inboundOrders) {
+            totalQuantityin += order.getQuantity();
+        }
+
         boolean result;
-        if (totalQuantity >= vo.getQuantity()) {
+        if (totalQuantity >= vo.getQuantity() && vo.getQuantity() <= (totalQuantity - totalQuantityin) && (totalQuantity - totalQuantityin) >= 0) {
             result = this.service().insert(vo, true);
             return Result.of(result);
         } else {
@@ -110,9 +120,9 @@ public class ReturnContoller extends BaseController<ReturnOrder, ReturnService> 
         for (SalesOrder order : salesOrders) {
             totalQuantity += order.getQuantity();
         }
-
+        ReturnOrder inbound = this.service().findByName("id", vo.getId());
         boolean result;
-        if (totalQuantity >= vo.getQuantity()) {
+        if ((totalQuantity - inbound.getQuantity() + vo.getQuantity()) <= totalQuantity) {
             result = this.service().update(vo, true, null);
             return Result.of(result);
         } else {

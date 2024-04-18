@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <link rel="icon" href="dist/img/hualogo.gif" sizes="32x32" type="image/gif">
-  <link rel="icon" href="dist/img/hualogo.gif" sizes="16x16" type="image/gif">
+  <link rel="icon" href="../dist/img/mendian.gif" sizes="32x32" type="image/gif">
+  <link rel="icon" href="../dist/img/mendian.gif" sizes="16x16" type="image/gif">
   <meta name="keywords" content="门店单据管理系统">
   <meta name="description" content="门店单据管理系统">
   <meta name="author" content="ajiho">
@@ -200,137 +200,144 @@
 
   $(function ($) {
 
+    _root.loginUser(null, function (rtn, status) {
+      if (rtn.hasError) {
+        alert(rock.errorText(rtn, "连接到服务器失败！"));
+      } else if (rtn.notNull && rtn.result.admin == 0) {
 
-    $("#hide_id").hide();
-    loadProduct();
-    loadCategory();
+        $("#hide_id").hide();
+        loadProduct();
+        loadCategory();
 
-    // 从 sessionStorage 中获取数据并解析为对象
-    var selectedUserData = JSON.parse(sessionStorage.getItem('selectedUserData'));
+        // 从 sessionStorage 中获取数据并解析为对象
+        var selectedUserData = JSON.parse(sessionStorage.getItem('selectedUserData'));
 
-    $("#quantity").val(selectedUserData.quantity);
-    $("#salePrice").val(selectedUserData.salePrice);
-    $("#id").attr("value", selectedUserData.id);
-    $("#unit").val(selectedUserData.unitName);
+        $("#quantity").val(selectedUserData.quantity);
+        $("#salePrice").val(selectedUserData.salePrice);
+        $("#id").attr("value", selectedUserData.id);
+        $("#unit").val(selectedUserData.unitName);
 
-    $("#form").formValidation({
-      //验证字段
+        $("#form").formValidation({
+          //验证字段
 
-      fields: {
-        productId: {
-          validators: {
-            notEmpty: {
-              message: '请选择'
-            }
+          fields: {
+            productId: {
+              validators: {
+                notEmpty: {
+                  message: '请选择'
+                }
 
-          }
-        },
-
-        salePrice: {
-          validators: {
-            notEmpty: {
-              message: '单价不能为空'
+              }
             },
-            regexp: {
-              regexp: /^\d+(\.\d{0,2})?$/,
-              message: '请输入最多两位小数的数字'
-            }
 
-          }
-        },
+            salePrice: {
+              validators: {
+                notEmpty: {
+                  message: '单价不能为空'
+                },
+                regexp: {
+                  regexp: /^\d+(\.\d{0,2})?$/,
+                  message: '请输入最多两位小数的数字'
+                }
 
-        quantity: {
-          validators: {
-            notEmpty: {
-              message: '不能为空'
+              }
             },
-            greaterThan: {
-              value: 1,
-              inclusive: true,
-              message: '数量最小为1'
-            }
+
+            quantity: {
+              validators: {
+                notEmpty: {
+                  message: '不能为空'
+                },
+                greaterThan: {
+                  value: 1,
+                  inclusive: true,
+                  message: '数量最小为1'
+                }
+              }
+            },
+
+
+            //...
           }
-        },
+        }).on('success.form.fv', function (e) {
 
+          //阻止表单提交
+          e.preventDefault();
 
-        //...
-      }
-    }).on('success.form.fv', function (e) {
-
-      //阻止表单提交
-      e.preventDefault();
-
-      // 获取表单字段的值
-      var id = document.getElementById('id').value;
-      var productId = document.getElementById('productId').value;
-      var categoryId = document.getElementById('categoryId').value;
-      var quantity = document.getElementById('quantity').value;
-      var unit = document.getElementById('unit').value;
-      var salePrice = document.getElementById('salePrice').value;
+          // 获取表单字段的值
+          var id = document.getElementById('id').value;
+          var productId = document.getElementById('productId').value;
+          var categoryId = document.getElementById('categoryId').value;
+          var quantity = document.getElementById('quantity').value;
+          var unit = document.getElementById('unit').value;
+          var salePrice = document.getElementById('salePrice').value;
 
 // 组织成 JSON 格式
-      var data = {
-        "id": id,
-        "productId": productId,
-        "salePrice": salePrice,
-        "quantity": quantity,
+          var data = {
+            "id": id,
+            "productId": productId,
+            "salePrice": salePrice,
+            "quantity": quantity,
 
-      };
+          };
 
-      $.ajax({
-        url: 'http://127.0.0.1:8081/voucher/product/update',
-        method: 'POST',
-        //跨域
-        xhrFields: {
-          withCredentials: true
-        },
-        contentType: 'application/json',
-        data: JSON.stringify({"unit": unit, "id": productId, "categoryId": categoryId}),
-      }).then(response => {
-        // 处理第二个 AJAX 请求的响应
-      });
+          $.ajax({
+            url: 'http://127.0.0.1:8081/voucher/product/update',
+            method: 'POST',
+            //跨域
+            xhrFields: {
+              withCredentials: true
+            },
+            contentType: 'application/json',
+            data: JSON.stringify({"unit": unit, "id": productId, "categoryId": categoryId}),
+          }).then(response => {
+            // 处理第二个 AJAX 请求的响应
+          });
 
 
 // 使用 AJAX 发送数据到后端
-      $.ajax({
-        //跨域
-        xhrFields: {
-          withCredentials: true
-        },
-        url: "http://127.0.0.1:8081/voucher/sale/updateSale",
-        method: 'post',
-        contentType: 'application/json',
-        data: JSON.stringify(data)
-      }).then(response => {
-        if (response.result) {
-          $.toasts({
-            type: 'success',
-            content: '修改信息成功！',
-            delay: 1000,
-            autohide: true,
-            onHidden: function () {
-              parent.modalInstance.setData(true);
-              parent.modalInstance.close();
+          $.ajax({
+            //跨域
+            xhrFields: {
+              withCredentials: true
+            },
+            url: "http://127.0.0.1:8081/voucher/sale/updateSale",
+            method: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify(data)
+          }).then(response => {
+            if (response.result) {
+              $.toasts({
+                type: 'success',
+                content: '修改信息成功！',
+                delay: 1000,
+                autohide: true,
+                onHidden: function () {
+                  parent.modalInstance.setData(true);
+                  parent.modalInstance.close();
+                }
+              });
+            } else if (response.hasError) {
+              var errorMessage = rock.errorText(response, "添加失败!");
+              $.toasts({
+                type: 'danger',
+                content: errorMessage,
+                delay: 3050, // 将显示时间设置
+                onShown: function () {
+                  if (response.errorCode === "1077") {
+                    $("#code").focus();
+                  }
+                }
+              });
             }
           });
-        } else if (response.hasError) {
-          var errorMessage = rock.errorText(response, "添加失败!");
-          $.toasts({
-            type: 'danger',
-            content: errorMessage,
-            delay: 3050, // 将显示时间设置
-            onShown: function () {
-              if (response.errorCode === "1077") {
-                $("#code").focus();
-              }
-            }
-          });
-        }
-      });
 
 
-    });
+        });
 
+      }
+
+    })
 
   });
 

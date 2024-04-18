@@ -74,7 +74,7 @@ public class InboundController extends BaseController<InboundOrder, InboundServi
         boolean re = Purchaseservice.existByName("productId", vo.getProductId(), null);
 
         if (re == false) {
-            return Result.toResult("1077", "此商品没有进货");
+            return Result.toResult("1077", "此商品没有进货!");
         }
         List<PurchaseOrder> purchase = Purchaseservice.findAllByName("productId", vo.getProductId(), null);
         // 初始化总数量为0
@@ -84,12 +84,20 @@ public class InboundController extends BaseController<InboundOrder, InboundServi
             totalQuantity += order.getQuantity();
         }
 
+        List<InboundOrder> inboundOrders = this.service().findAllByName("productId", vo.getProductId(), null);
+        // 初始化总数量为0
+        int totalQuantityin = 0;
+// 遍历 purchase 列表并累加数量
+        for (InboundOrder order : inboundOrders) {
+            totalQuantityin += order.getQuantity();
+        }
+
         boolean result;
-        if (totalQuantity >= vo.getQuantity()) {
+        if (totalQuantity >= vo.getQuantity() && vo.getQuantity() <= (totalQuantity - totalQuantityin) && (totalQuantity - totalQuantityin) >= 0) {
             result = this.service().insert(vo, true);
             return Result.of(result);
         } else {
-            return Result.toResult("1077", "入库的商品数量不能大于进货数量！*^____^*");
+            return Result.toResult("1077", "入库的商品总数量不能大于进货数量！*^____^*");
         }
 
     }
@@ -111,12 +119,13 @@ public class InboundController extends BaseController<InboundOrder, InboundServi
             totalQuantity += order.getQuantity();
         }
 
+        InboundOrder inbound = this.service().findByName("id", vo.getId());
         boolean result;
-        if (totalQuantity >= vo.getQuantity()) {
+        if ((totalQuantity - inbound.getQuantity() + vo.getQuantity()) <= totalQuantity) {
             result = this.service().update(vo, true, null);
             return Result.of(result);
         } else {
-            return Result.toResult("1077", "入库的商品数量不能大于进货数量！*^____^*");
+            return Result.toResult("1077", "入库的商品总数量不能大于进货数量！*^____^*");
         }
 
     }

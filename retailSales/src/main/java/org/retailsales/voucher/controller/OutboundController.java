@@ -103,7 +103,7 @@ public class OutboundController extends BaseController<OutboundOrder, OutboundSe
             result = this.service().update(vo, true, null);
             return Result.of(result);
         } else {
-            return Result.toResult("1077", "出库的商品数量不能大于进货数量！*^____^*");
+            return Result.toResult("1077", "出库的商品数量不能大于库存数量！*^____^*");
         }
 
     }

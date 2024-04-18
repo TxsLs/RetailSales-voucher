@@ -5,6 +5,7 @@ function redirectToLogin() {
 $(function () {
   //前端表单验证
 
+
   $('#form').formValidation({
 
     fields: {
@@ -129,4 +130,6 @@ $(function () {
 
     });
   });
+
+
 });

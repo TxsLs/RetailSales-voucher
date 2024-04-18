@@ -58,9 +58,9 @@ public class InboundOrder extends Entity {
     @Column(value = "f_price", tableAlias = "po", ignoreInsert = true, ignoreUpdate = true)
     private BigDecimal price;
 
-    @Schema(description = "进货总价", required = false, example = "4")
+    /*@Schema(description = "进货总价", required = false, example = "4")
     @Column(value = "f_total_price", tableAlias = "po", ignoreInsert = true, ignoreUpdate = true)
-    private BigDecimal totalPrice;
+    private BigDecimal totalPrice;*/
 
     @Schema(description = "供应商id", required = true, example = "4")
     @Column(value = "f_id", tableAlias = "s", ignoreInsert = true, ignoreUpdate = true)

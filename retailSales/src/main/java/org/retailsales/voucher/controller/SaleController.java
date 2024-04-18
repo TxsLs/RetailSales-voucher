@@ -102,7 +102,7 @@ public class SaleController extends BaseController<SalesOrder, SaleService> {
         boolean re = outboundService.existByName("productId", vo.getProductId(), null);
 
         if (re == false) {
-            return Result.toResult("1077", "此商品没有出库");
+            return Result.toResult("1077", "此商品没有上架");
         }
         Product product = productservice.findByName("id", vo.getProductId());
         boolean result;
@@ -110,7 +110,7 @@ public class SaleController extends BaseController<SalesOrder, SaleService> {
             result = this.service().update(vo, true, null);
             return Result.of(result);
         } else {
-            return Result.toResult("1077", "销售的商品数量不能大于货架数量！*^____^*");
+            return Result.toResult("1077", "销售的商品数量不能大于上架数量！*^____^*");
         }
 
     }

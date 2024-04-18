@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <link rel="icon" href="dist/img/hualogo.gif" sizes="32x32" type="image/gif">
-  <link rel="icon" href="dist/img/hualogo.gif" sizes="16x16" type="image/gif">
+  <link rel="icon" href="../dist/img/mendian.gif" sizes="32x32" type="image/gif">
+  <link rel="icon" href="../dist/img/mendian.gif" sizes="16x16" type="image/gif">
   <meta name="keywords" content="门店单据管理系统">
   <meta name="description" content="bootstrap门店单据管理系统">
   <meta name="author" content="ajiho">
@@ -345,7 +345,7 @@
                 content: '修改个人信息成功！',
                 onHidden: function () {
 
-                  top.location.replace('../employee.html');
+                  top.location.replace('../index.html');
                 }
               });
             } else if (res.errorCode == "1067") {
@@ -355,7 +355,7 @@
                 content: errorMessage,
                 onHidden: function () {
 
-                  top.location.replace('../employee.html');
+                  top.location.replace('../index.html');
                 }
               });
             } else {

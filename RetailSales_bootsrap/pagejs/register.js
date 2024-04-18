@@ -148,8 +148,11 @@ $(function () {
 
     //发起ajax请求
     $.ajax({
+      xhrFields: {
+        withCredentials: true
+      },
       method: 'Post',
-      url: 'http://127.0.0.1:8081/voucher/addEmployee',
+      url: 'http://127.0.0.1:8081/voucher/employee/addEmployee',
       //表单数据
       data: data,
       processData: false,

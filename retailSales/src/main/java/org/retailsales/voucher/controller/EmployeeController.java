@@ -41,29 +41,35 @@ import java.io.IOException;
 @RequestMapping("/employee")
 public class EmployeeController extends BaseController<Employee, EmployeeService> {
 
-	@Operation(summary = "添加员工实体", description = "允许文件上传！")
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "成功"),
-			@ApiResponse(responseCode = "400", description = "无效的请求"),
-			@ApiResponse(responseCode = "401", description = "未经授权"),
-			@ApiResponse(responseCode = "403", description = "禁止访问"),
-			@ApiResponse(responseCode = "404", description = "未找到"),
-			@ApiResponse(responseCode = "500", description = "服务器内部错误")
+	@Operation(summary = "添加员工实体", description = "允许文件上传！", responses = {
+			@ApiResponse(description = "成功添加员工", responseCode = "200", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Result.class))),
+			@ApiResponse(description = "账号名已存在", responseCode = "400", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Result.class)))
 	})
-	@PostMapping("/addEmployee")
-	public ResponseEntity<Result<Boolean>> addEmployee(@Validated @RequestBody Employee vo,
-													   @RequestParam(value = "photo", required = false) MultipartFile file) throws IOException {
+	@PostMapping(value = "/addEmployee", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
+	public @ResponseBody Result<Boolean> addEmployee(
+			@RequestParam(value = "code") String code,
+			@RequestParam(value = "name") String name,
+			@RequestParam(value = "gender") int gender,
+			@RequestParam(value = "password") String password,
+			@RequestParam(value = "phone") long phone,
+			@RequestPart(value = "photo", required = false) MultipartFile file) throws IOException {
+		Employee vo = new Employee();
+		vo.setCode(code);
+		vo.setName(name);
+		vo.setGender(gender);
+		vo.setPassword(password);
+		vo.setPhone(phone);
 		log.debug("call addEmployee");
 		boolean exist = this.service().existByName("code", vo.getCode(), null);
-		boolean result = false;
+		boolean result;
 		if (!exist) {
 			result = this.service().insert(vo, true);
 			if (result && file != null && !file.isEmpty()) {
 				result = this.updatePhoto(vo.id(), file);
 			}
-			return ResponseEntity.ok(Result.of(result));
+			return Result.of(result);
 		} else {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Result.toResult("1067", "账号名已存在！请重试！"));
+			return Result.toResult("1067", "账号名已存在！请重试！");
 		}
 	}
 
@@ -103,7 +109,7 @@ public class EmployeeController extends BaseController<Employee, EmployeeService
 
 	@Operation(summary = "根据员工id更新自己的信息", description = "当前用户可以修改自己少部分个人信息")
 	@PostMapping("/updateSelfInfo")
-	public ResponseEntity<Result<Boolean>> updateSelfInfo(
+	public @ResponseBody Result<Boolean> updateSelfInfo(
 			@Parameter(description = "要更新实体的主键id", required = true)
 			@RequestParam("id") @Positive Long id,
 			@Parameter(description = "账号")
@@ -122,30 +128,26 @@ public class EmployeeController extends BaseController<Employee, EmployeeService
 			String loginCode = AppUtils.getLoginUser().getUsername();
 			Employee employee = service().findByCode(loginCode);
 			Long employeeId = employee.getId();
-
-			if (!id.equals(employeeId)) {
-				return ResponseEntity.badRequest().body(Result.toResult("1069", "只能更新自己的信息！"));
-			}
-
+			Employee vo = new Employee();
+			vo.setId(id);
+			vo.setCode(code);
+			vo.setName(name);
+			vo.setGender(gender);
+			vo.setPhone(phone);
 			Boolean exist = service().existByName("code", code, employeeId);
 			if (!exist) {
-				Employee vo = new Employee();
-				vo.setId(id);
-				vo.setCode(code);
-				vo.setName(name);
-				vo.setGender(gender);
-				vo.setPhone(phone);
+
 
 				boolean result = this.service().update(vo, true, null);
 				if (result && file != null && !file.isEmpty()) {
 					result = this.updatePhoto(id, file);
 				}
-				return ResponseEntity.ok(Result.of(result));
+				return Result.of(result);
 			} else {
-				return ResponseEntity.badRequest().body(Result.toResult("1067", "账号名已存在！请重试！"));
+				return Result.toResult("1067", "账号名已存在！请重试！");
 			}
 		} else {
-			return ResponseEntity.badRequest().body(Result.toResult("1068", "未登录！请返回登录界面！"));
+			return Result.toResult("1068", "未登录！请返回登录界面！");
 		}
 	}
 

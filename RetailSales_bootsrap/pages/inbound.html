@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <link rel="icon" href="dist/img/hualogo.gif" sizes="32x32" type="image/gif">
-  <link rel="icon" href="dist/img/hualogo.gif" sizes="16x16" type="image/gif">
+  <link rel="icon" href="../dist/img/mendian.gif" sizes="32x32" type="image/gif">
+  <link rel="icon" href="../dist/img/mendian.gif" sizes="16x16" type="image/gif">
   <meta name="keywords" content="门店单据管理系统">
   <meta name="description" content="门店单据管理系统">
   <meta name="author" content="ajiho">
@@ -121,7 +121,7 @@
 
         <div class="col-12 gap-2">
 
-          <button type="button" class="btn btn-light bsa-querySearch-btn" onclick="loadTableData();">
+          <button type="button" class="btn btn-light bsa-querySearch-btn">
             <i class="bi bi-search"></i>搜索
           </button>
           <button type="button" class="btn btn-light bsa-reset-btn">
@@ -399,16 +399,20 @@
       onLoadSuccess: function (data) {
         var data = $('#table').bootstrapTable('getData', true);
         //合并单元格
-        mergeCells(data, "productName", 1, $('#table'));
-        mergeCells(data, "id", 1, $('#table'));
-        mergeCells(data, "categoryName", 1, $('#table'));
-        mergeCells(data, "quantity", 1, $('#table'));
-        mergeCells(data, "stockQuantity", 1, $('#table'));
-        mergeCells(data, "unitName", 1, $('#table'));
-        mergeCells(data, "inboundDate", 1, $('#table'));
-        mergeCells(data, "supplierName", 1, $('#table'));
-        mergeCells(data, "purchaseDate", 1, $('#table'));
-        mergeCells(data, "emp", 1, $('#table'));
+        if (data.length == 0) {
+          return;
+        } else {
+          mergeCells(data, "productName", 1, $('#table'));
+          mergeCells(data, "id", 1, $('#table'));
+          mergeCells(data, "categoryName", 1, $('#table'));
+          mergeCells(data, "quantity", 1, $('#table'));
+          mergeCells(data, "stockQuantity", 1, $('#table'));
+          mergeCells(data, "unitName", 1, $('#table'));
+          mergeCells(data, "inboundDate", 1, $('#table'));
+          mergeCells(data, "supplierName", 1, $('#table'));
+          mergeCells(data, "purchaseDate", 1, $('#table'));
+          mergeCells(data, "emp", 1, $('#table'));
+        }
       },
 
       //列
@@ -483,13 +487,16 @@
           sortable: true,
         },
         {
-          title: '进货总价',
+          title: '入库商品总价',
           field: 'totalPrice',
           align: 'center',
           sortable: true,
           formatter: function (value, row, index) {
             //const formattedPrice = Number(value).toFixed(2);
-            return `￥${value}`;
+            const price = row.price; // 获取单价
+            const quantity = row.quantity; // 获取数量
+            const totalP = price * quantity; // 计算总价
+            return `￥${totalP.toFixed(2)}`;
           }
         },
         {
@@ -614,10 +621,7 @@
      @param target 目标表格对象
     */
     function mergeCells(data, fieldName, colspan, target) {
-      if (data.length == 0) {
-        alert("没有查询到数据！");
 
-      }
       var numArr = [];
       var value = data[0][fieldName];
       var num = 0;
@@ -735,6 +739,9 @@ $('.excel').off('click').on('click', function () {
         // 安全检查并转换手机号和用户信息为字符串类型
         let supplierPhone = row.supplierPhone ? row.supplierPhone.toString() : '';
         let emp = row.emp ? row.emp.toString() : '';
+        // 计算总价（假设价格和数量字段名为price和quantity）
+        let totalPrice = row.price * row.quantity;
+
         let rowData = [
           row.id,
           row.productName,
@@ -743,7 +750,7 @@ $('.excel').off('click').on('click', function () {
           row.quantity,
           row.stockQuantity,
           row.unitName,
-          {v: `￥${row.totalPrice}`, t: 's'}, // 将总价设置为字符串类型，以保留货币符号
+          {v: `￥${totalPrice}`, t: 's'}, // 将总价设置为字符串类型，以保留货币符号
           row.inboundDate,
           row.purchaseDate,
           row.supplierName,
@@ -1062,15 +1069,6 @@ $('.excel').off('click').on('click', function () {
         // //下拉框美化插件，原生的bootstrap它会调用系统的那个下拉菜单
         // $('select').selectpicker();
 
-      } else {
-        $.toasts({
-          type: 'danger',
-          content: '未登录！',
-          delay: 3000,
-          onHidden: function () {
-            top.location.replace('login.html');
-          }
-        })
       }
     })
 

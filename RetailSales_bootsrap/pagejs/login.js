@@ -79,7 +79,7 @@ function submitForm($frm) {
           type: 'success',
           content: '商城员工登录成功！',
           onHidden: function () {
-            location.href = "../employee.html";
+            location.href = "../index.html";
           }
         });
 

@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <link rel="icon" href="dist/img/hualogo.gif" sizes="32x32" type="image/gif">
-  <link rel="icon" href="dist/img/hualogo.gif" sizes="16x16" type="image/gif">
+  <link rel="icon" href="../dist/img/mendian.gif" sizes="32x32" type="image/gif">
+  <link rel="icon" href="../dist/img/mendian.gif" sizes="16x16" type="image/gif">
   <meta name="keywords" content="门店单据管理系统">
   <meta name="description" content="门店单据管理系统">
   <meta name="author" content="ajiho">
@@ -181,121 +181,131 @@
 
 
   $(function ($) {
-    // loadCategory();
-    loadProduct();
+
+    _root.loginUser(null, function (rtn, status) {
+      if (rtn.hasError) {
+        alert(rock.errorText(rtn, "连接到服务器失败！"));
+      } else if (rtn.notNull && rtn.result.admin == 0) {
+
+        // loadCategory();
+        loadProduct();
 
 
-    $("#form").formValidation({
-      //验证字段
+        $("#form").formValidation({
+          //验证字段
 
-      fields: {
+          fields: {
 
 
-        quantity: {
-          validators: {
-            notEmpty: {
-              message: '数量不能为空'
+            quantity: {
+              validators: {
+                notEmpty: {
+                  message: '数量不能为空'
+                },
+                greaterThan: {
+                  value: 1,
+                  inclusive: true,
+                  message: '数量最小为1'
+                }
+              }
             },
-            greaterThan: {
-              value: 1,
-              inclusive: true,
-              message: '数量最小为1'
-            }
-          }
-        },
 
-        reason: {
-          validators: {
+            reason: {
+              validators: {
 
-            stringLength: {
-              min: 0,
-              max: 200,
-              message: '不要超过200字'
-            }
-          }
-        },
-        productId: {
-          validators: {
-            notEmpty: {
-              message: '请选择商品信息'
-            }
-          }
-        },
-        totalPrice: {
-          validators: {
-            notEmpty: {
-              message: '单价不能为空'
+                stringLength: {
+                  min: 0,
+                  max: 200,
+                  message: '不要超过200字'
+                }
+              }
             },
-            regexp: {
-              regexp: /^\d+(\.\d{0,2})?$/,
-              message: '请输入最多两位小数的数字'
-            }
+            productId: {
+              validators: {
+                notEmpty: {
+                  message: '请选择商品信息'
+                }
+              }
+            },
+            totalPrice: {
+              validators: {
+                notEmpty: {
+                  message: '单价不能为空'
+                },
+                regexp: {
+                  regexp: /^\d+(\.\d{0,2})?$/,
+                  message: '请输入最多两位小数的数字'
+                }
+
+              }
+            },
+            emp: {
+              validators: {
+                notEmpty: {
+                  message: '请输入操作人代号'
+                }
+              }
+            },
 
           }
-        },
-        emp: {
-          validators: {
-            notEmpty: {
-              message: '请输入操作人代号'
-            }
-          }
-        },
+        }).on('success.form.fv', function (e) {
 
-      }
-    }).on('success.form.fv', function (e) {
+          //阻止表单提交
+          e.preventDefault();
 
-      //阻止表单提交
-      e.preventDefault();
-
-      // 得到表单对象
-      let $form = $(e.target);
+          // 得到表单对象
+          let $form = $(e.target);
 
 // 构建包含表单数据的对象
-      let formData = {};
-      $form.serializeArray().forEach(item => {
-        formData[item.name] = item.value;
-      });
+          let formData = {};
+          $form.serializeArray().forEach(item => {
+            formData[item.name] = item.value;
+          });
 
 // 将对象转换为 JSON 字符串
-      let jsonData = JSON.stringify(formData);
-      //得到序列化数据
-      $.ajax({
-        url: "http://127.0.0.1:8081/voucher/return/addReturn",
-        method: 'post',
-        contentType: 'application/json',
-        data: jsonData,
-      }).then(response => {
+          let jsonData = JSON.stringify(formData);
+          //得到序列化数据
+          $.ajax({
+            url: "http://127.0.0.1:8081/voucher/return/addReturn",
+            method: 'post',
+            contentType: 'application/json',
+            data: jsonData,
+          }).then(response => {
 
-        if (response.result) {
-          $.toasts({
-            type: 'success',
-            content: '添加成功！',
-            delay: 1500,
-            autohide: true,
-            onHidden: function () {
-              parent.modalInstance.setData(true);
-              parent.modalInstance.close();
+            if (response.result) {
+              $.toasts({
+                type: 'success',
+                content: '添加成功！',
+                delay: 1500,
+                autohide: true,
+                onHidden: function () {
+                  parent.modalInstance.setData(true);
+                  parent.modalInstance.close();
+                }
+              });
+            } else if (response.hasError) {
+              var errorMessage = rock.errorText(response, "添加失败!");
+              $.toasts({
+                type: 'danger',
+                content: errorMessage,
+                delay: 3050, // 将显示时间设置
+                onShown: function () {
+                  if (response.errorCode === "1077") {
+                    $("#code").focus();
+                  }
+                }
+              });
+
             }
-          });
-        } else if (response.hasError) {
-          var errorMessage = rock.errorText(response, "添加失败!");
-          $.toasts({
-            type: 'danger',
-            content: errorMessage,
-            delay: 3050, // 将显示时间设置
-            onShown: function () {
-              if (response.errorCode === "1077") {
-                $("#code").focus();
-              }
-            }
+
+
           });
 
-        }
+        });
 
+      }
 
-      });
-
-    });
+    })
 
     //  }
     // });

@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <link rel="icon" href="dist/img/hualogo.gif" sizes="32x32" type="image/gif">
-  <link rel="icon" href="dist/img/hualogo.gif" sizes="16x16" type="image/gif">
+  <link rel="icon" href="../dist/img/mendian.gif" sizes="32x32" type="image/gif">
+  <link rel="icon" href="../dist/img/mendian.gif" sizes="16x16" type="image/gif">
   <meta name="keywords" content="门店单据管理系统">
   <meta name="description" content="门店单据管理系统">
   <meta name="author" content="ajiho">
@@ -63,7 +63,7 @@
           <div class="d-flex align-items-center justify-content-between">
             <div class="me-1">
               <h6 class="mb-2 bsa-ellipsis-1">所有商品数量</h6>
-              <h4 class="mb-1 bsa-ellipsis-1" id="shops">1546</h4>
+              <h4 class="mb-1 bsa-ellipsis-1" id="shops"></h4>
             </div>
             <i class="bi bi-bag-heart fs-1 text-info"></i>
           </div>
@@ -76,7 +76,7 @@
           <div class="d-flex align-items-center justify-content-between">
             <div class="me-1">
               <h6 class="mb-2 bsa-ellipsis-1">进货单总数</h6>
-              <h4 class="mb-1 bsa-ellipsis-1" id="order">2000</h4>
+              <h4 class="mb-1 bsa-ellipsis-1" id="order"></h4>
             </div>
             <i class="bi bi-cart fs-1 text-primary"></i>
           </div>
@@ -90,7 +90,7 @@
           <div class="d-flex align-items-center justify-content-between">
             <div class="me-1">
               <h6 class="mb-2 bsa-ellipsis-1">销售单总数</h6>
-              <h4 class="mb-1 bsa-ellipsis-1" id="order2">2000</h4>
+              <h4 class="mb-1 bsa-ellipsis-1" id="order2"></h4>
             </div>
             <i class="bi bi-cart fs-1 text-primary"></i>
           </div>
@@ -103,7 +103,7 @@
           <div class="d-flex align-items-center justify-content-between">
             <div class="me-1">
               <h6 class="mb-2 bsa-ellipsis-1">退货单总数</h6>
-              <h4 class="mb-1 bsa-ellipsis-1" id="order3">2000</h4>
+              <h4 class="mb-1 bsa-ellipsis-1" id="order3"></h4>
             </div>
             <i class="bi bi-cart fs-1 text-primary"></i>
           </div>
@@ -792,15 +792,6 @@
     });
 
 
-      } else {
-        $.toasts({
-          type: 'danger',
-          content: '未登录,或没有权限！',
-          delay: 3000,
-          onHidden: function () {
-            top.location.replace('login.html');
-          }
-        })
       }
 
     })
