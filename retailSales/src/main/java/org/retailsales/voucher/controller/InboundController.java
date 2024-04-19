@@ -120,8 +120,16 @@ public class InboundController extends BaseController<InboundOrder, InboundServi
         }
 
         InboundOrder inbound = this.service().findByName("id", vo.getId());
+        List<InboundOrder> inboundOrders = this.service().findAllByName("productId", vo.getProductId(), null);
+        // 初始化总数量为0
+        int totalQuantityin = 0;
+// 遍历 purchase 列表并累加数量
+        for (InboundOrder order : inboundOrders) {
+            totalQuantityin += order.getQuantity();
+        }
+
         boolean result;
-        if ((totalQuantity - inbound.getQuantity() + vo.getQuantity()) <= totalQuantity) {
+        if (totalQuantity >= totalQuantityin && (totalQuantity - totalQuantityin >= 0) && ((vo.getQuantity() < inbound.getQuantity()) || Math.abs(vo.getQuantity() - inbound.getQuantity()) <= totalQuantity - totalQuantityin)) {
             result = this.service().update(vo, true, null);
             return Result.of(result);
         } else {

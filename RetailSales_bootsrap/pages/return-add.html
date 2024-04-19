@@ -32,6 +32,23 @@
 </div> -->
 
           <div class="row mb-3">
+            <label for="cus" class="col-sm-3 col-form-label text-sm-end">查询销售单信息</label>
+            <div class="col-sm-9">
+              <div class="input-group">
+                <span class="input-group-text bg-white"><i class="bi bi-bookmark-plus"></i></span>
+                <input type="text" class="form-control" id="cus" name="cus" maxlength="20"
+                       tabindex="2" aria-label="name" autocomplete="on"
+                       placeholder="输入查询的顾客流水号"
+                       data-bv-container="#err_username"
+                >
+                <button type="submit" class="btn btn-primary" id="addSupplierButton">查询顾客销售单信息</button>
+              </div>
+
+            </div>
+          </div>
+
+
+          <div class="row mb-3">
             <label for="productId" class="col-sm-3 col-form-label text-sm-end">商品名称</label>
             <div class="col-sm-9">
               <div class="input-group">
@@ -57,6 +74,16 @@
             </div>
           </div>
 
+          <div class="row mb-3">
+            <label for="price" class="col-sm-3 col-form-label text-sm-end">销售单价</label>
+            <div class="col-sm-9">
+              <div class="input-group">
+                <span class="input-group-text bg-white"><i class="bi bi-currency-yen"></i></span>
+                <input type="text" class="form-control" id="price" name="price" maxlength="20" tabindex="2" readonly
+                       aria-label="name" autocomplete="on" placeholder="待查寻" data-bv-container="#err_username">
+              </div>
+            </div>
+          </div>
 
           <div class="row mb-3">
             <label for="totalPrice" class="col-sm-3 col-form-label text-sm-end">退货总金额</label>
@@ -69,7 +96,7 @@
             </div>
           </div>
 
-          <div class="row mb-3">
+          <!-- <div class="row mb-3">
             <label for="cus" class="col-sm-3 col-form-label text-sm-end">顾客备注</label>
             <div class="col-sm-9">
               <div class="input-group">
@@ -78,7 +105,7 @@
                        aria-label="name" autocomplete="on" placeholder="请输入" data-bv-container="#err_username">
               </div>
             </div>
-          </div>
+          </div> -->
 
 
           <div class="row mb-3">
@@ -88,7 +115,7 @@
                 <span class="input-group-text bg-white"><i class="bi bi-window-dock"></i></span>
                 <textarea class="form-control" id="reason" rows="6" name="reason" maxlength="200"
                           tabindex="2" autocomplete="on" placeholder="请输入" data-bv-container="#err_username"
-                          pattern="^[\u4e00-\u9fa5A-Za-z0-9\uFF01-\uFFEF]{0,200}$"></textarea>
+                          pattern="^[\u4e00-\u9fa5A-Za-z0-9\uFF01-\uFFEF\\pP‘’“”￥……（）、。：；？【】《》——！～·]{0,200}$"></textarea>
               </div>
             </div>
           </div>
@@ -99,7 +126,7 @@
             <div class="col-sm-9">
               <div class="input-group">
                 <span class="input-group-text bg-white"><i class="bi bi-bag-plus-fill"></i></span>
-                <input type="text" class="form-control" id="emp" name="emp" maxlength="20" tabindex="2"
+                <input type="text" class="form-control" id="emp" name="emp" maxlength="20" tabindex="2" readonly
                        aria-label="emp" autocomplete placeholder="请输入员工编号" data-bv-container="#err_username"
                        pattern="^[\u4e00-\u9fa5A-Za-z0-9\uFF01-\uFFEF]{0,20}$">
               </div>
@@ -180,15 +207,162 @@
   }
 
 
+  // 获取单价和退货数量输入框
+  var priceInpu = document.getElementById('price');
+  var quantityInput = document.getElementById('quantity');
+  var totalPriceInput = document.getElementById('totalPrice');
+
+  // 添加事件监听器
+  priceInpu.addEventListener('input', updateTotalPrice);
+  quantityInput.addEventListener('input', updateTotalPrice);
+
+  function updateTotalPrice() {
+    // 获取单价和退货数量的值
+    var price = parseFloat(priceInpu.value);
+    var quantity = parseInt(quantityInput.value);
+
+    // 计算退货总金额
+    var totalPrice = price * quantity;
+
+    // 更新退货总金额输入框的值
+    if (!isNaN(totalPrice)) {
+      totalPriceInput.value = totalPrice.toFixed(2); // 保留两位小数
+    } else {
+      totalPriceInput.value = ''; // 如果计算结果不是数字，则清空输入框
+    }
+  }
+
   $(function ($) {
 
     _root.loginUser(null, function (rtn, status) {
       if (rtn.hasError) {
         alert(rock.errorText(rtn, "连接到服务器失败！"));
       } else if (rtn.notNull && rtn.result.admin == 0) {
-
+        $("#emp").val(rtn.result.name);
         // loadCategory();
         loadProduct();
+        updateTotalPrice()
+
+// 获取按钮和输入框元素
+        let addButtons = document.getElementById('addSupplierButton');
+
+        let supplierNameInput = document.getElementById('cus');
+        let errorElements = null; // 错误提示元素
+
+// 添加点击事件监听器
+        addButtons.addEventListener('click', function (event) {
+          event.preventDefault(); // 阻止表单的默认提交行为
+
+          // 获取输入框的值
+          let cus = supplierNameInput.value;
+
+          // 校验输入框不为空
+          if (cus.trim() === '') {
+            // 输入框为空，显示错误提示
+            showErrorMessage('输入框不能为空');
+            return; // 停止执行后续逻辑
+          }
+
+
+          // 使用 AJAX 发送数据到后端
+          $.ajax({
+            url: 'http://127.0.0.1:8081/voucher/sale/queryByName',
+            type: 'GET',
+            //跨域
+            xhrFields: {
+              withCredentials: true
+            },
+            contentType: 'application/json',
+            data: {propName: "cus", propValue: cus},
+            success: function (response) {
+              if (response.result) {
+                $.toasts({
+                  type: 'info',
+                  content: '查询销售信息成功！',
+                  delay: 1000,
+                  onHidden: function () {
+                    $("#quantity").val(response.result.quantity);
+
+                    $("#totalPrice").val(response.result.quantity * response.result.salePrice);
+
+                    $("#price").val(response.result.salePrice);
+
+                    var $search = $("#productId");
+                    var defaultOption = $search.find('option:first'); // 保存 "请选择分类" 选项
+
+                    $search.empty(); // 清空除了 "请选择分类" 选项之外的其他选项
+                    $search.append(defaultOption); // 重新添加 "请选择分类" 选项
+
+                    productService.queryAll({sort: "id"}, function (rtn, status) {
+                      if (rtn.hasError) {
+                        alert(rock.errorText(rtn, "查询列表失败!"));
+                      } else if (rtn.notEmpty) {
+                        var list = rtn.result, option = '<option value="%s">[%s] － %s</option>';
+                        var $search = $("#productId");
+                        $.each(list, function (i, vo) {
+                          $search.append(rock.format(option, [vo.id, vo.id, vo.name]));
+                          // 从 sessionStorage 中获取数据并解析为对象
+
+                          if (vo.id == response.result.productId) {
+                            $search.children(":last-child").prop("selected", true);
+                          }
+                          // $edit.append(rock.format(option, [vo.id, vo.code, vo.name]));
+                        });
+                      } else {
+                        alert("未查询到列表!");
+                      }
+                    });
+
+                  }
+                });
+              } else {
+
+                $.toasts({
+                  type: 'danger',
+                  content: '没有此顾客流水信息!',
+                  delay: 3000,
+
+                });
+              }
+
+            }
+
+          });
+        });
+
+
+// 监听输入框的输入变化
+        supplierNameInput.addEventListener('input', function () {
+          hideErrorMessage(); // 隐藏错误提示
+          supplierNameInput.classList.remove('error'); // 移除输入框的错误样式
+        });
+
+// 显示错误提示
+        function showErrorMessage(message) {
+          // 如果已经存在错误提示元素，则更新其内容
+          if (errorElements) {
+            errorElements.textContent = message;
+            return;
+          }
+
+          // 创建新的错误提示元素
+          errorElements = document.createElement('div');
+          errorElements.classList.add('error-message');
+          errorElements.textContent = message;
+
+          // 插入到输入框的下方
+          supplierNameInput.parentNode.appendChild(errorElements);
+          supplierNameInput.classList.add('error'); // 添加输入框的错误样式
+        }
+
+// 隐藏错误提示
+        function hideErrorMessage() {
+          if (errorElements) {
+            errorElements.parentNode.removeChild(errorElements);
+            errorElements = null; // 重置错误提示元素
+          }
+          supplierNameInput.classList.remove('error'); // 移除输入框的错误样式
+        }
 
 
         $("#form").formValidation({

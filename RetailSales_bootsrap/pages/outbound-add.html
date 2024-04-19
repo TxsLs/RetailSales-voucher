@@ -63,7 +63,7 @@
             <div class="col-sm-9">
               <div class="input-group">
                 <span class="input-group-text bg-white"><i class="bi bi-bag-plus-fill"></i></span>
-                <input type="text" class="form-control" id="emp" name="emp" maxlength="20" tabindex="2"
+                <input type="text" class="form-control" id="emp" name="emp" maxlength="20" tabindex="2" readonly
                        aria-label="emp" autocomplete placeholder="请输入员工编号" data-bv-container="#err_username"
                        pattern="^[\u4e00-\u9fa5A-Za-z0-9\uFF01-\uFFEF]{0,20}$">
               </div>
@@ -150,7 +150,7 @@
       if (rtn.hasError) {
         alert(rock.errorText(rtn, "连接到服务器失败！"));
       } else if (rtn.notNull && rtn.result.admin == 0) {
-
+        $("#emp").val(rtn.result.name);
         // loadCategory();
         loadProduct();
 

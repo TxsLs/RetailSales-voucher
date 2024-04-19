@@ -61,13 +61,12 @@
         </div>
 
         <div class="row mb-3">
-          <label for="reason" class="col-sm-3 col-form-label text-sm-end">退货原因</label>
+          <label for="price" class="col-sm-3 col-form-label text-sm-end">销售单价</label>
           <div class="col-sm-9">
             <div class="input-group">
-              <span class="input-group-text bg-white"><i class="bi bi-window-dock"></i></span>
-              <textarea class="form-control" id="reason" rows="6" name="reason" maxlength="200"
-                        tabindex="2" autocomplete="on" placeholder="请输入" data-bv-container="#err_username"
-                        pattern="^[\u4e00-\u9fa5A-Za-z0-9\uFF01-\uFFEF]{0,200}$"></textarea>
+              <span class="input-group-text bg-white"><i class="bi bi-currency-yen"></i></span>
+              <input type="text" class="form-control" id="price" name="price" maxlength="20" tabindex="2" readonly
+                     aria-label="name" autocomplete="on" placeholder="待查寻" data-bv-container="#err_username">
             </div>
           </div>
         </div>
@@ -84,7 +83,20 @@
         </div>
 
         <div class="row mb-3">
-          <label for="cus" class="col-sm-3 col-form-label text-sm-end">顾客备注</label>
+          <label for="reason" class="col-sm-3 col-form-label text-sm-end">退货原因</label>
+          <div class="col-sm-9">
+            <div class="input-group">
+              <span class="input-group-text bg-white"><i class="bi bi-window-dock"></i></span>
+              <textarea class="form-control" id="reason" rows="6" name="reason" maxlength="200"
+                        tabindex="2" autocomplete="on" placeholder="请输入" data-bv-container="#err_username"
+                        pattern="^[\u4e00-\u9fa5A-Za-z0-9\uFF01-\uFFEF]{0,200}$"></textarea>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row mb-3">
+          <label for="cus" class="col-sm-3 col-form-label text-sm-end">顾客流水号</label>
           <div class="col-sm-9">
             <div class="input-group">
               <span class="input-group-text bg-white"><i class="bi bi-currency-yen"></i></span>
@@ -207,7 +219,30 @@
   //       }
   //     });
   //   }
+  // 获取单价和退货数量输入框
+  var priceInpu = document.getElementById('price');
+  var quantityInput = document.getElementById('quantity');
+  var totalPriceInput = document.getElementById('totalPrice');
 
+  // 添加事件监听器
+  priceInpu.addEventListener('input', updateTotalPrice);
+  quantityInput.addEventListener('input', updateTotalPrice);
+
+  function updateTotalPrice() {
+    // 获取单价和退货数量的值
+    var price = parseFloat(priceInpu.value);
+    var quantity = parseInt(quantityInput.value);
+
+    // 计算退货总金额
+    var totalPrice = price * quantity;
+
+    // 更新退货总金额输入框的值
+    if (!isNaN(totalPrice)) {
+      totalPriceInput.value = totalPrice.toFixed(2); // 保留两位小数
+    } else {
+      totalPriceInput.value = ''; // 如果计算结果不是数字，则清空输入框
+    }
+  }
 
   $(function ($) {
 
@@ -219,10 +254,11 @@
         $("#hide_id").hide();
         loadProduct();
 // loadCategory();
-
+        updateTotalPrice()
         // 从 sessionStorage 中获取数据并解析为对象
         var selectedUserData = JSON.parse(sessionStorage.getItem('selectedUserData'));
-
+        var price = JSON.parse(sessionStorage.getItem('saleprice'));
+        $("#price").val(price);
         $("#quantity").val(selectedUserData.quantity);
         $("#reason").val(selectedUserData.reason);
         $("#cus").val(selectedUserData.cus);

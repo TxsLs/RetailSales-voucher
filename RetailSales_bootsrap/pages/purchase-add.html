@@ -74,7 +74,7 @@
             <div class="col-sm-9">
               <div class="input-group">
                 <span class="input-group-text bg-white"><i class="bi bi-currency-yen"></i></span>
-                <input type="text" class="form-control" id="price" name="price" maxlength="20" tabindex="2"
+                <input type="text" class="form-control" id="price" name="price" maxlength="20" tabindex="2" readonly
                        aria-label="name" autocomplete="on" placeholder="请输入进货单价"
                        data-bv-container="#err_username">
               </div>
@@ -295,7 +295,7 @@
         if (response.result) {
           $.toasts({
             type: 'info',
-            content: '添加供应商',
+            content: '添加供应商成功！',
             delay: 1000,
             onHidden: function () {
               loadSupplier();
@@ -361,7 +361,7 @@
       if (rtn.hasError) {
         alert(rock.errorText(rtn, "连接到服务器失败！"));
       } else if (rtn.notNull && rtn.result.admin == 0) {
-
+        $("#emp").val(rtn.result.name);
         // loadCategory();
         loadProduct();
         loadSupplier();

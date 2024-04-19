@@ -186,7 +186,6 @@
           $search.append(rock.format(option, [vo.id, vo.id, vo.name]));
           // 从 sessionStorage 中获取数据并解析为对象
           var selectedUserData = JSON.parse(sessionStorage.getItem('selectedUserData'));
-          console.log(selectedUserData)
           if (vo.id == selectedUserData.categoryId) {
             $search.children(":last-child").prop("selected", true);
           }
