@@ -111,7 +111,19 @@
       </div>
     </div>
 
-
+    <div class="col-lg-3">
+      <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center justify-content-between">
+            <div class="me-1">
+              <h6 class="mb-2 bsa-ellipsis-1">已注册员工账号总数</h6>
+              <h4 class="mb-1 bsa-ellipsis-1" id="emp"></h4>
+            </div>
+            <i class="bi bi-people fs-1 text-info"></i>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="col-lg-6">
       <div class="card border-0 shadow-sm">
@@ -442,6 +454,34 @@
 
           }
 
+        });
+
+
+        $.ajax({
+          xhrFields: {
+            withCredentials: true
+          },
+          method: 'get',
+          url: 'http://127.0.0.1:8081/voucher/employee/queryAll',
+          //表单数据
+          data: {
+            sort: "id"
+          },
+        }).then(response => {
+          if (response.result) {
+            var emps = response.result.length;
+
+            $('#emp').html(emps)
+            //数字老虎机效果
+            new countUp.CountUp(document.querySelector('#emp'), emps, {
+              //小数点后面的位数
+              decimalPlaces: 0,
+              //持续时间
+              duration: 2
+            }).start();
+
+
+          }
         });
 
 
