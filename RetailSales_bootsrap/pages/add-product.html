@@ -23,14 +23,18 @@
     <p class="text-secondary text-center">填写商品信息</p>
 
     <form id="form" class="form">
-      <div class="mb-3">
-        <div class="input-group">
-          <span class="input-group-text bg-white"><i class="bi bi-person-vcard"></i></span>
-          <input type="text" class="form-control" id="name" name="name" maxlength="20" tabindex="2" autocomplete="on"
-                 placeholder="请输入商品名称" required data-bv-container="#err_username"
-                 pattern="^[\u4e00-\u9fa5A-Za-z0-9\uFF01-\uFFEF]{0,20}$">
-        </div>
 
+      <div class="row mb-3">
+        <label for="name" class="col-sm-3 col-form-label text-sm-end">商品名称</label>
+        <div class="col-sm-9">
+          <div class="input-group">
+            <span class="input-group-text bg-white"><i class="bi bi-person-vcard"></i></span>
+            <input type="text" class="form-control" id="name" name="name" maxlength="20" tabindex="2" autocomplete="on"
+                   placeholder="请输入商品名称" required data-bv-container="#err_username"
+                   pattern="^[\u4e00-\u9fa5A-Za-z0-9\uFF01-\uFFEF]{0,20}$">
+          </div>
+
+        </div>
       </div>
 
 
