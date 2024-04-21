@@ -409,8 +409,8 @@
           mergeCells(data, "stockQuantity", 1, $('#table'));
           mergeCells(data, "unitName", 1, $('#table'));
           mergeCells(data, "inboundDate", 1, $('#table'));
-          mergeCells(data, "supplierName", 1, $('#table'));
-          mergeCells(data, "purchaseDate", 1, $('#table'));
+          // mergeCells(data, "supplierName", 1, $('#table'));
+          // mergeCells(data, "purchaseDate", 1, $('#table'));
           mergeCells(data, "emp", 1, $('#table'));
         }
       },
@@ -737,7 +737,7 @@ $('.excel').off('click').on('click', function () {
       // 填充数据并记录需要合并的单元格
       selectedRows.forEach((row, index) => {
         // 安全检查并转换手机号和用户信息为字符串类型
-        let supplierPhone = row.supplierPhone ? row.supplierPhone.toString() : '';
+
         let emp = row.emp ? row.emp.toString() : '';
 
 
@@ -1078,7 +1078,7 @@ $('.excel').off('click').on('click', function () {
     //把所有的字段都恢复默认值
     $('#productName').val('');
     loadCategory();
-    loadSupplier();
+
 
     $('#joinTime').val('');
     $('#endTime').val('');
@@ -1114,7 +1114,7 @@ $('.excel').off('click').on('click', function () {
 
     loadTableData();
     loadCategory();
-    loadSupplier();
+
 
   });
 

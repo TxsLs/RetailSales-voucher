@@ -173,33 +173,33 @@
     });
   }
 
-  var mvc = rock.initSvr(["supplier"]);
-  var supplierService = mvc.findService("supplier");
-  rock.initBasicMethod([supplierService]);
+  // var mvc = rock.initSvr(["supplier"]);
+  // var supplierService = mvc.findService("supplier");
+  // rock.initBasicMethod([supplierService]);
 
-  function loadSupplier() {
-    var $search = $("#supplierId");
-    var defaultOption = $search.find('option:first'); // 保存 "请选择分类" 选项
+  // function loadSupplier() {
+  //   var $search = $("#supplierId");
+  //   var defaultOption = $search.find('option:first'); // 保存 "请选择分类" 选项
 
-    $search.empty(); // 清空除了 "请选择分类" 选项之外的其他选项
-    $search.append(defaultOption); // 重新添加 "请选择分类" 选项
+  //   $search.empty(); // 清空除了 "请选择分类" 选项之外的其他选项
+  //   $search.append(defaultOption); // 重新添加 "请选择分类" 选项
 
-    supplierService.queryAll({sort: "id"}, function (rtn, status) {
-      if (rtn.hasError) {
-        alert(rock.errorText(rtn, "查询列表失败!"));
-      } else if (rtn.notEmpty) {
-        var list = rtn.result, option = '<option value="%s">[%s] － %s</option>';
-        var $search = $("#supplierId");
-        $.each(list, function (i, vo) {
-          $search.append(rock.format(option, [vo.id, vo.phone, vo.name]));
-          // $edit.append(rock.format(option, [vo.id, vo.code, vo.name]));
-        });
+  //   supplierService.queryAll({sort: "id"}, function (rtn, status) {
+  //     if (rtn.hasError) {
+  //       alert(rock.errorText(rtn, "查询列表失败!"));
+  //     } else if (rtn.notEmpty) {
+  //       var list = rtn.result, option = '<option value="%s">[%s] － %s</option>';
+  //       var $search = $("#supplierId");
+  //       $.each(list, function (i, vo) {
+  //         $search.append(rock.format(option, [vo.id, vo.phone, vo.name]));
+  //         // $edit.append(rock.format(option, [vo.id, vo.code, vo.name]));
+  //       });
 
-      } else {
-        alert("未查询到部门列表!");
-      }
-    });
-  }
+  //     } else {
+  //       alert("未查询到部门列表!");
+  //     }
+  //   });
+  // }
 
   // const priceInput = document.getElementById('price');
   // priceInput.addEventListener('blur', function () {
@@ -1022,8 +1022,8 @@ $('.excel').off('click').on('click', function () {
     //把所有的字段都恢复默认值
     $('#productName').val('');
     loadCategory();
-    loadSupplier();
-    $('#price').val('');
+    // loadSupplier();
+    // $('#price').val('');
     $('#joinTime').val('');
     $('#endTime').val('');
     $('#quantity').val('');
@@ -1058,7 +1058,7 @@ $('.excel').off('click').on('click', function () {
 
     loadTableData();
     loadCategory();
-    loadSupplier();
+    // loadSupplier();
 
   });
 
