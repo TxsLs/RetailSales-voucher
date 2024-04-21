@@ -504,14 +504,6 @@
                       if (response.result) {
                         sessionStorage.setItem('saleprice', JSON.stringify(response.result.salePrice));
                         console.log(response.result.salePrice)
-                      } else {
-
-                        $.toasts({
-                          type: 'danger',
-                          content: '没有此顾客流水信息!',
-                          delay: 3000,
-
-                        });
                       }
 
                     }

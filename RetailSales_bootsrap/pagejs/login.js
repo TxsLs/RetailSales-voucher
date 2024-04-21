@@ -77,7 +77,7 @@ function submitForm($frm) {
       } else if (!rtn.result) {
         $.toasts({
           type: 'success',
-          content: '商城员工登录成功！',
+          content: '门店员工登录成功！',
           onHidden: function () {
             location.href = "../index.html";
           }
