@@ -34,9 +34,9 @@ public class InboundController extends BaseController<InboundOrder, InboundServi
     public @ResponseBody Result<PageSet<InboundOrder>> queryPage(
             @Parameter(description = "名称(支持like)，允许null") @RequestParam(required = false) String productName,
             @Parameter(description = "排序规则字符串") @RequestParam(required = false) String sort,
-            @Parameter(description = "排序规则字符串") @RequestParam(required = false) String price,
+//            @Parameter(description = "排序规则字符串") @RequestParam(required = false) String price,
             @Parameter(description = "categoryid") @RequestParam(required = false) String categoryId,
-            @Parameter(description = "supplierId") @RequestParam(required = false) String supplierId,
+//            @Parameter(description = "supplierId") @RequestParam(required = false) String supplierId,
             @Parameter(description = "categoryName") @RequestParam(required = false) String categoryName,
             @Parameter(description = "排序规则字符串") @RequestParam(required = false) String quantity,
             @Parameter(description = "起始时间") @RequestParam(required = false) String joinTime,
@@ -47,16 +47,16 @@ public class InboundController extends BaseController<InboundOrder, InboundServi
         Predicate where = DaoUtil.and();
         if (StringUtils.isNotEmpty(productName))
             where.like("productName", productName);
-        if (StringUtils.isNotEmpty(price))
-            where.equal("price", price);
+//        if (StringUtils.isNotEmpty(price))
+//            where.equal("price", price);
         if (StringUtils.isNotEmpty(quantity))
             where.equal("quantity", quantity);
         if (StringUtils.isNotEmpty(categoryName))
             where.like("categoryName", categoryName);
         if (StringUtils.isNotEmpty(categoryId))
             where.like("categoryId", categoryId);
-        if (StringUtils.isNotEmpty(supplierId))
-            where.like("supplierId", supplierId);
+//        if (StringUtils.isNotEmpty(supplierId))
+//            where.like("supplierId", supplierId);
         if (StringUtils.isNotEmpty(categoryName))
             where.like("categoryName", categoryName);
         if (StringUtils.isNotEmpty(joinTime) && StringUtils.isNotEmpty(endTime)) {

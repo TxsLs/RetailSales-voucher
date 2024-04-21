@@ -47,7 +47,7 @@
           </div>
         </div>
 
-        <div class="col-12">
+        <!-- <div class="col-12">
           <div class="row">
             <label for="supplierId" class="col-sm-auto col-form-label">供应商</label>
             <div class="col">
@@ -56,9 +56,9 @@
               </select>
             </div>
           </div>
-        </div>
+        </div> -->
 
-        <div class="col-12">
+        <!-- <div class="col-12">
           <div class="row">
             <label for="price" class="col-sm-auto col-form-label">商品单价</label>
             <div class="col">
@@ -66,7 +66,7 @@
                      aria-label="name" autocomplete="on" maxlength="20">
             </div>
           </div>
-        </div>
+        </div> -->
 
         <div class="col-12">
           <div class="row">
@@ -193,33 +193,33 @@
     });
   }
 
-  var mvc = rock.initSvr(["supplier"]);
-  var supplierService = mvc.findService("supplier");
-  rock.initBasicMethod([supplierService]);
+  // var mvc = rock.initSvr(["supplier"]);
+  // var supplierService = mvc.findService("supplier");
+  // rock.initBasicMethod([supplierService]);
 
-  function loadSupplier() {
-    var $search = $("#supplierId");
-    var defaultOption = $search.find('option:first'); // 保存 "请选择分类" 选项
+  // function loadSupplier() {
+  //   var $search = $("#supplierId");
+  //   var defaultOption = $search.find('option:first'); // 保存 "请选择分类" 选项
 
-    $search.empty(); // 清空除了 "请选择分类" 选项之外的其他选项
-    $search.append(defaultOption); // 重新添加 "请选择分类" 选项
+  //   $search.empty(); // 清空除了 "请选择分类" 选项之外的其他选项
+  //   $search.append(defaultOption); // 重新添加 "请选择分类" 选项
 
-    supplierService.queryAll({sort: "id"}, function (rtn, status) {
-      if (rtn.hasError) {
-        alert(rock.errorText(rtn, "查询列表失败!"));
-      } else if (rtn.notEmpty) {
-        var list = rtn.result, option = '<option value="%s">[%s] － %s</option>';
-        var $search = $("#supplierId");
-        $.each(list, function (i, vo) {
-          $search.append(rock.format(option, [vo.id, vo.phone, vo.name]));
-          // $edit.append(rock.format(option, [vo.id, vo.code, vo.name]));
-        });
+  //   supplierService.queryAll({sort: "id"}, function (rtn, status) {
+  //     if (rtn.hasError) {
+  //       alert(rock.errorText(rtn, "查询列表失败!"));
+  //     } else if (rtn.notEmpty) {
+  //       var list = rtn.result, option = '<option value="%s">[%s] － %s</option>';
+  //       var $search = $("#supplierId");
+  //       $.each(list, function (i, vo) {
+  //         $search.append(rock.format(option, [vo.id, vo.phone, vo.name]));
+  //         // $edit.append(rock.format(option, [vo.id, vo.code, vo.name]));
+  //       });
 
-      } else {
-        alert("未查询到部门列表!");
-      }
-    });
-  }
+  //     } else {
+  //       alert("未查询到部门列表!");
+  //     }
+  //   });
+  // }
 
   // const priceInput = document.getElementById('price');
   // priceInput.addEventListener('blur', function () {
@@ -451,16 +451,16 @@
           align: 'center',
           sortable: true,
         },
-        {
-          title: '进货单价',
-          field: 'price',
-          align: 'center',
-          sortable: true,
-          formatter: function (value, row, index) {
-            //const formattedPrice = Number(value).toFixed(2);
-            return `￥${value}`;
-          }
-        },
+        // {
+        //   title: '进货单价',
+        //   field: 'price',
+        //   align: 'center',
+        //   sortable: true,
+        //   formatter: function (value, row, index) {
+        //     //const formattedPrice = Number(value).toFixed(2);
+        //     return `￥${value}`;
+        //   }
+        // },
         {
           title: '入库数量',
           field: 'quantity',
@@ -486,19 +486,19 @@
           align: 'center',
           sortable: true,
         },
-        {
-          title: '入库商品总价',
-          field: 'totalPrice',
-          align: 'center',
-          sortable: true,
-          formatter: function (value, row, index) {
-            //const formattedPrice = Number(value).toFixed(2);
-            const price = row.price; // 获取单价
-            const quantity = row.quantity; // 获取数量
-            const totalP = price * quantity; // 计算总价
-            return `￥${totalP.toFixed(2)}`;
-          }
-        },
+        // {
+        //   title: '入库商品总价',
+        //   field: 'totalPrice',
+        //   align: 'center',
+        //   sortable: true,
+        //   formatter: function (value, row, index) {
+        //     //const formattedPrice = Number(value).toFixed(2);
+        //     const price = row.price; // 获取单价
+        //     const quantity = row.quantity; // 获取数量
+        //     const totalP = price * quantity; // 计算总价
+        //     return `￥${totalP.toFixed(2)}`;
+        //   }
+        // },
         {
           title: '入库时间',
           field: 'inboundDate',
@@ -506,25 +506,25 @@
           sortable: true,
           //formatter: formatContent,
         },
-        {
-          title: '进货时间',
-          field: 'purchaseDate',
-          align: 'center',
-          sortable: true,
-          //formatter: formatContent,
-        },
-        {
-          title: '供应商名称',
-          field: 'supplierName',
-          align: 'center',
-          sortable: true,
-        },
-        {
-          title: '供应商联系方式',
-          field: 'supplierPhone',
-          align: 'center',
-          sortable: true,
-        },
+        // {
+        //   title: '进货时间',
+        //   field: 'purchaseDate',
+        //   align: 'center',
+        //   sortable: true,
+        //   //formatter: formatContent,
+        // },
+        // {
+        //   title: '供应商名称',
+        //   field: 'supplierName',
+        //   align: 'center',
+        //   sortable: true,
+        // },
+        // {
+        //   title: '供应商联系方式',
+        //   field: 'supplierPhone',
+        //   align: 'center',
+        //   sortable: true,
+        // },
 
         {
           title: '操作人',
@@ -728,7 +728,7 @@ $('.excel').off('click').on('click', function () {
           v: `入库单据 (${period})`,
           s: {fontSize: 14, bold: true, alignment: {horizontal: "center", vertical: "center"}}
         }], // 设置表头样式
-        ['单据编号', '商品名称', '分类名称', '进货单价', '入库数量', '库存数量', '计件方式', '进货总价', '入库时间', '进货时间', '供应商名称', '供应商联系方式', '操作人']
+        ['单据编号', '商品名称', '分类名称', '入库数量', '库存数量', '计件方式', '入库时间', '操作人']
       ]);
 
       // 定义单元格合并信息数组
@@ -739,22 +739,20 @@ $('.excel').off('click').on('click', function () {
         // 安全检查并转换手机号和用户信息为字符串类型
         let supplierPhone = row.supplierPhone ? row.supplierPhone.toString() : '';
         let emp = row.emp ? row.emp.toString() : '';
-        // 计算总价（假设价格和数量字段名为price和quantity）
-        let totalPrice = row.price * row.quantity;
+
 
         let rowData = [
           row.id,
           row.productName,
           row.categoryName,
-          {v: `￥${row.price}`, t: 's'}, // 将价格设置为字符串类型，以保留货币符号
+
           row.quantity,
           row.stockQuantity,
           row.unitName,
-          {v: `￥${totalPrice}`, t: 's'}, // 将总价设置为字符串类型，以保留货币符号
+
           row.inboundDate,
-          row.purchaseDate,
-          row.supplierName,
-          {v: supplierPhone, t: 's'}, // 将手机号转换为字符串类型
+
+
           {v: emp, t: 's'},// 将用户信息转换为字符串类型
         ];
         XLSX.utils.sheet_add_aoa(worksheet, [rowData], {origin: -1});
@@ -1081,7 +1079,7 @@ $('.excel').off('click').on('click', function () {
     $('#productName').val('');
     loadCategory();
     loadSupplier();
-    $('#price').val('');
+
     $('#joinTime').val('');
     $('#endTime').val('');
     $('#quantity').val('');

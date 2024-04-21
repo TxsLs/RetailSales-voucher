@@ -39,7 +39,7 @@ public class ReturnContoller extends BaseController<ReturnOrder, ReturnService> 
             @Parameter(description = "排序规则字符串") @RequestParam(required = false) String sort,
             @Parameter(description = "排序规则字符串") @RequestParam(required = false) String totalPrice,
             @Parameter(description = "categoryid") @RequestParam(required = false) String categoryId,
-            @Parameter(description = "supplierId") @RequestParam(required = false) String supplierId,
+//            @Parameter(description = "supplierId") @RequestParam(required = false) String supplierId,
             @Parameter(description = "categoryName") @RequestParam(required = false) String categoryName,
             @Parameter(description = "排序规则字符串") @RequestParam(required = false) String quantity,
             @Parameter(description = "起始时间") @RequestParam(required = false) String joinTime,
@@ -56,8 +56,8 @@ public class ReturnContoller extends BaseController<ReturnOrder, ReturnService> 
             where.equal("quantity", quantity);
         if (StringUtils.isNotEmpty(categoryId))
             where.like("categoryId", categoryId);
-        if (StringUtils.isNotEmpty(supplierId))
-            where.like("supplierId", supplierId);
+//        if (StringUtils.isNotEmpty(supplierId))
+//            where.like("supplierId", supplierId);
         if (StringUtils.isNotEmpty(categoryName))
             where.like("categoryName", categoryName);
         if (StringUtils.isNotEmpty(joinTime) && StringUtils.isNotEmpty(endTime)) {
