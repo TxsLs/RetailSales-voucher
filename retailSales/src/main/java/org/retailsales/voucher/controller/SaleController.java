@@ -82,7 +82,7 @@ public class SaleController extends BaseController<SalesOrder, SaleService> {
         boolean re = outboundService.existByName("productId", vo.getProductId(), null);
 
         if (re == false) {
-            return Result.toResult("1077", "此商品没有出库");
+            return Result.toResult("1077", "此商品没有上架");
         }
         Product product = productservice.findByName("id", vo.getProductId());
         boolean result;
